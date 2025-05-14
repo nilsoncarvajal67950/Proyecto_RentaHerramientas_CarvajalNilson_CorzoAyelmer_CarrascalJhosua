@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alkile - Alquiler de Herramientas</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="logo-container">
+                <img src="images/logo-transparente.png" alt="Alkile Logo" class="logo-img">
+            </div>
+            <p class="slogan">Alquila herramientas por el tiempo que las necesitas</p>
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html">INICIO</a></li>
+                    <li><a href="tienda.html">TIENDA</a></li>
+                    <li id="user-menu"><a href="cuenta.html"><i class="fas fa-user"></i> MI CUENTA</a></li>
+                    <li><a href="carrito.html"><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)</a>
+                    </li>
+                </ul>
+            </nav>
+
+            <div id="page-content">
+                <div class="auth-container">
+                    <div class="auth-tabs">
+                        <button class="tab-btn active" data-tab="login">Iniciar Sesión</button>
+                        <button class="tab-btn" data-tab="register">Registrarse</button>
+                    </div>
+
+                    <div id="login-form" class="auth-form active">
+                        <h2>Iniciar Sesión</h2>
+                        <form id="loginForm">
+                            <input type="email" placeholder="Correo electrónico" required>
+                            <input type="password" placeholder="Contraseña" required>
+                            <button type="submit">Ingresar</button>
+                        </form>
+                    </div>
+
+                    <div id="register-form" class="auth-form">
+                        <h2>Registrarse</h2>
+                        <form id="registerForm">
+                            <input type="text" placeholder="Nombre completo" required>
+                            <input type="email" placeholder="Correo electrónico" required>
+                            <input type="password" placeholder="Contraseña" required>
+                            <button type="submit">Registrarse</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="footer">
+        <div class="container">
+            <p>&copy; 2023 Alkile - Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
