@@ -1,129 +1,111 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alkile - Registro</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Registro - Plataforma de Renta de Herramientas</title>
 
-        body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+    <script src="https://cdn.tailwindcss.com"></script>
 
-        .logo-container {
-            margin-bottom: 30px;
-            text-align: center;
-        }
+    <link rel="stylesheet" href="../css/custom.css" />
 
-        .logo-img {
-            max-width: 180px;
-            height: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
-        }
-
-        .auth-form {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            width: 100%;
-            max-width: 450px;
-            transition: all 0.3s ease;
-            transform: translateY(0);
-            opacity: 1;
-        }
-
-        .auth-form h2 {
-            color: #2c3e50;
-            margin-bottom: 25px;
-            text-align: center;
-            font-size: 28px;
-            font-weight: 600;
-        }
-
-        .auth-form form {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .auth-form input {
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-
-        .auth-form input:focus {
-            outline: none;
-            border-color: #3498db;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
-        }
-
-        .auth-form button {
-            background: #3498db;
-            color: white;
-            border: none;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 10px;
-        }
-
-        .auth-form button:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(41, 128, 185, 0.4);
-        }
-
-        .auth-form button:active {
-            transform: translateY(0);
-        }
-
-        .auth-form:not(.active) {
-            display: none;
-        }
-
-        @media (max-width: 480px) {
-            .auth-form {
-                padding: 30px 20px;
-            }
-            
-            .auth-form h2 {
-                font-size: 24px;
-            }
-        }
-    </style>
+    <link rel="icon" href="../assets/favicon.ico" />
 </head>
-<body>
-    <div class="logo-container">
-        <img src="images/logo-transparente.png" alt="Alkile Logo" class="logo-img">
-    </div>
-    
-    <div id="register-form" class="auth-form active">
-        <h2>Registrarse</h2>
-        <form id="registerForm">
-            <input type="text" placeholder="Nombre completo" required>
-            <input type="email" placeholder="Correo electrónico" required>
-            <input type="password" placeholder="Contraseña" required>
-            <button type="submit">Crear cuenta</button>
-        </form>
-    </div>
+
+<body class="bg-stone-50 min-h-screen flex flex-col">
+    <header class="bg-blue-400 shadow-md">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="/">
+                    <img src="../assets/images/icons/logo-transparente.png" alt="Alkile Logo" class="w-20 h-10" />
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="/" class="text-gray-700 hover:text-orange-500 transition">Inicio</a>
+                <a href="/pages/tools.html" class="text-gray-700 hover:text-orange-500 transition">Herramientas</a>
+                <a href="/pages/about.html" class="text-gray-700 hover:text-orange-500 transition">Nosotros</a>
+                <a href="/pages/contact.html" class="text-gray-700 hover:text-orange-500 transition">Contacto</a>
+            </nav>
+            <div class="flex items-center space-x-4">
+                <a href="/pages/login.html"
+                    class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600 transition">Iniciar
+                    Sesión</a>
+                <a href="/pages/register.html"
+                    class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600 transition">Registrarse</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden text-gray-700">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t">
+            <div class="container mx-auto px-4 py-2 space-y-2">
+                <a href="/" class="block text-gray-700 hover:text-orange-500 transition py-2">Inicio</a>
+                <a href="/pages/tools.html"
+                    class="block text-gray-700 hover:text-orange-500 transition py-2">Herramientas</a>
+                <a href="/pages/about.html"
+                    class="block text-gray-700 hover:text-orange-500 transition py-2">Nosotros</a>
+                <a href="/pages/contact.html"
+                    class="block text-gray-700 hover:text-orange-500 transition py-2">Contacto</a>
+            </div>
+        </div>
+    </header>
+
+    <section class="flex-grow flex items-center justify-center py-12 px-4">
+        <div class="max-w-md w-full bg-white rounded-lg shadow-lg overflow-hidden">
+            <div class="bg-emerald-400 text-slate py-4 px-6">
+                <h2 class="text-2xl font-bold">Registrarse</h2>
+                <p class="text-slate-700">
+                    ingresa su informacion para registrarte
+                </p>
+            </div>
+            <form id="login-form" class="py-6 px-8">
+                <div class="mb-4">
+                    <label for="name" class="block text-slate-700 text-sm font-medium mb-2">Nombre completo</label>
+                    <input type="name" id="name" name="name"
+                        class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        required />
+                </div>
+                <div class="mb-4">
+                    <label for="email" class="block text-slate-700 text-sm font-medium mb-2">Correo Electrónico</label>
+                    <input type="email" id="email" name="email"
+                        class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        required />
+                </div>
+                <div class="mb-6">
+                    <label for="password" class="block text-gray-700 text-sm font-medium mb-2">Contraseña</label>
+                    <input type="password" id="password" name="password"
+                        class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                        required />
+                </div>
+                <div class="mb-6">
+                    <button type="submit"
+                        class="w-full bg-emerald-400 text-slate py-2 px-4 rounded-md hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition">
+                        crear cuenta
+                    </button>
+            </form>
+        </div>
+    </section>
+
+    <footer class="bg-blue-400 text-white py-8">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-4 md:mb-0">
+                    <img src="../assets/images/icons/logo-transparente.png" alt="Logo"
+                        class="h-10 w-auto inline-block" />
+                </div>
+            </div>
+            <div class="border-t border-emerald-700 mt-4 pt-4 text-center text-stone-700">
+                <p>&copy; 2025 Alkile.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="../js/app.js"></script>
 </body>
+
 </html>
