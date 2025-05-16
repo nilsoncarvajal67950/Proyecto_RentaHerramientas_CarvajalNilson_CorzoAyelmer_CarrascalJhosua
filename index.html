@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,24 +9,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
+
         .animate-fade-in {
             animation: fadeIn 0.5s ease-in-out;
         }
     </style>
 </head>
+
 <body class="bg-stone-50 font-inter text-gray-700">
     <header class="bg-blue-400 shadow-sm">
         <div class="container mx-auto px-4 py-4 relative">
             <div class="flex items-center justify-between">
-                <div class="flex items-center space-x-4">
+                <div class="flex space-x-4">
                     <img src="./assets/images/icons/logo-transparente.png" alt="Alkile Logo" class="h-16 w-auto">
-                    <p class="text-gray-600 text-sm hidden md:block">Alquila herramientas por el tiempo que las necesitas</p>
                 </div>
-                
-                <div class="absolute right-4 top-4 text-right text-sm">
+                <p class="text-slate-700  text-2xl hidden md:block">Alquila herramientas por el tiempo que las necesitas
+                </p>
+                <div class="text-right text-sm">
                     <p>3164938507 - 3336475416</p>
                     <p>contacto@alkile.com</p>
                 </div>
@@ -33,9 +41,10 @@
 
             <nav class="mt-4 flex items-center justify-between">
                 <ul class="flex space-x-6">
-                    <li><a href="index.html" class="text-gray-700 hover:text-orange-500">INICIO</a></li>
-                    <li id="user-menu"><a href="pages/login.html" class="text-gray-700 hover:text-orange-500"><i class="fas fa-user mr-1"></i> MI CUENTA</a></li>
-                    <li><a href="pages/carrito.html" class="text-gray-700 hover:text-orange-500"><i class="fas fa-shopping-cart mr-1"></i> (<span id="cart-count">0</span>)</a></li>
+                    <li><a href="index.html" class="text-slate-700 hover:text-white">INICIO</a></li>
+                    <li id="user-menu"><a href="pages/login.html" class="text-slate-700 hover:text-white"><i
+                                class="fas fa-user mr-1"></i> MI CUENTA</a></li>
+                    <li><a href="pages/carrito.html" class="text-slate-700 hover:text-white"><i class="fas fa-shopping-cart mr-1"></i> (<span id="cart-count">0</span>)</a></li>
                 </ul>
             </nav>
         </div>
@@ -46,26 +55,26 @@
             <div class="text-center mb-8">
                 <h2 class="text-3xl font-bold mb-4">Nuestras herramientas</h2>
                 <div class="max-w-2xl mx-auto mb-6 flex">
-                    <input type="text" id="search-input" 
-                           class="flex-1 px-4 py-2 border border-gray-300 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
-                           placeholder="Buscar herramientas...">
-                    <button id="search-btn" 
-                            class="bg-orange-500 text-white px-6 py-2 rounded-r-lg hover:bg-orange-600 transition-colors">
+                    <input type="text" id="search-input"
+                        class="flex-1 px-4 py-2 border border-emerald-400 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Buscar herramientas...">
+                    <button id="search-btn"
+                        class="bg-emerald-500 text-white px-6 py-2 rounded-r-lg hover:bg-emerald-600 transition-colors">
                         <i class="fas fa-search"></i>
                     </button>
                 </div>
-                
+
                 <div class="grid md:grid-cols-2 gap-4 max-w-xl mx-auto">
-                    <select id="category-filter" 
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
+                    <select id="category-filter"
+                        class="bg-emerald-500 text-white py-2 border border-emerald-400 rounded-lg focus:outline-none focus:ring-emerald-500">
                         <option value="">Todas las categorías</option>
                     </select>
-                    
-                    <select id="price-filter" 
-                            class="px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500">
-                        <option value="">Ordenar por precio</option>
-                        <option value="asc">Menor a mayor</option>
-                        <option value="desc">Mayor a menor</option>
+
+                    <select id="price-filter"
+                        class="bg-emerald-500 hover:bg-emerald-600 text-white py-2 border border-emerald-400 rounded-lg focus:outline-none focus:ring-emerald-600 ">
+                        <option class="bg-emerald-500 hover:bg-emerald-600" value="">Ordenar por precio</option>
+                        <option class="bg-emerald-500 hover:bg-emerald-600" value="asc">Menor a mayor</option>
+                        <option class="bg-emerald-500 hover:bg-emerald-600" value="desc">Mayor a menor</option>
                     </select>
                 </div>
             </div>
@@ -73,49 +82,56 @@
 
         <section class="tools mb-12">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8" id="tool-grid">
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
+                <div
+                    class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
                     <img src="./assets/images/tools/compresor.png" alt="Herramienta" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="font-bold text-lg mb-2">Nombre herramienta</h3>
                         <p class="text-gray-600 mb-4">Descripción corta de la herramienta</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-orange-500 font-bold">$XX.XXX/día</span>
-                            <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                            <span class="text-emerald-500 font-bold">$XX.XXX/día</span>
+                            <button
+                                class="bg-emerald-500 text-white px-3 py-2  rounded-md hover:bg-emerald-600 transition">
                                 Alquilar
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
-                    <img src="./assets/images/tools/guia-angular.png" alt="Herramienta" class="w-full h-48 object-cover">
+                <div
+                    class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
+                    <img src="./assets/images/tools/guia-angular.png" alt="Herramienta"
+                        class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="font-bold text-lg mb-2">Nombre herramienta</h3>
                         <p class="text-gray-600 mb-4">Descripción corta de la herramienta</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-orange-500 font-bold">$XX.XXX/día</span>
-                            <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                            <span class="text-emerald-500 font-bold">$XX.XXX/día</span>
+                            <button
+                                class="bg-emerald-500 text-white px-3 py-2  rounded-md hover:bg-emerald-600 transition">
                                 Alquilar
                             </button>
                         </div>
                     </div>
                 </div>
-                <div class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
+                <div
+                    class="bg-white rounded-lg shadow-md overflow-hidden transition-transform hover:scale-105 hover:shadow-lg">
                     <img src="./assets/images/tools/pulidora.png" alt="Herramienta" class="w-full h-48 object-cover">
                     <div class="p-4">
                         <h3 class="font-bold text-lg mb-2">Nombre herramienta</h3>
                         <p class="text-gray-600 mb-4">Descripción corta de la herramienta</p>
                         <div class="flex justify-between items-center">
-                            <span class="text-orange-500 font-bold">$XX.XXX/día</span>
-                            <button class="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600 transition-colors">
+                            <span class="text-emerald-500 font-bold">$XX.XXX/día</span>
+                            <button
+                                class="bg-emerald-500 text-white px-3 py-2  rounded-md hover:bg-emerald-600 transition">
                                 Alquilar
                             </button>
                         </div>
                     </div>
                 </div>
             </div>
-            
-            <button class="w-full bg-orange-500 text-white px-6 py-3 rounded-lg hover:bg-orange-600 transition-colors" 
-                    id="load-more">
+
+            <button class=" w-full bg-emerald-500 text-white px-3 py-2  rounded-md hover:bg-emerald-600 transition"
+                id="load-more">
                 Cargar más herramientas
             </button>
         </section>
@@ -124,8 +140,9 @@
             <h3 class="text-2xl font-bold mb-6">Categorías populares</h3>
             <div class="flex overflow-x-auto pb-4 space-x-4">
 
-                <a href="#" class="flex-shrink-0 px-6 py-3 bg-white rounded-full shadow-md hover:shadow-lg transition-shadow">
-                    <span class="text-orange-500">Categoría</span>
+                <a href="#"
+                    class="bg-emerald-500 hover:bg-emerald-600 px-6 py-3 rounded-full shadow-md hover:shadow-lg transition-shadow">
+                    <span class="text-white">Categoría</span>
                 </a>
             </div>
         </section>

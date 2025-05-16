@@ -4,48 +4,210 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alkile - Alquiler de Herramientas</title>
+    <title>Carrito - Plataforma de Renta de Herramientas</title>
+
     <script src="https://cdn.tailwindcss.com"></script>
-
-    <link rel="stylesheet" href="../css/custom.css" />
-
-    <link rel="icon" href="../assets/favicon.ico" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
-<body class="bg-stone-50 min-h-screen flex flex-col">
+<body class="bg-stone-50 font-inter text-gray-700">
     <header class="bg-blue-400 shadow-md">
-        <div class="container">
-            <p class="slogan">Alquila herramientas por el tiempo que las necesitas</p>
-            <nav class="nav">
-                <ul>
-                    <li><a href="../index.html">INICIO</a></li>
-                    <li id="user-menu"><a href="./login.html"><i class="fas fa-user"></i> MI CUENTA</a></li>
-                    <li><a href="carrito.html"><i class="fas fa-shopping-cart"></i> (<span id="cart-count">0</span>)</a>
-                    </li>
-                </ul>
+        <div class="container mx-auto px-4 py-5 flex justify-between items-center">
+            <div class="flex items-center">
+                <a href="/">
+                    <img src="../assets/images/icons/logo-transparente.png" alt="Alkile Logo"
+                        class="w-20 h-10 transform -translate-x-1" />
+                </a>
+            </div>
+            <nav class="hidden md:flex space-x-6">
+                <a href="/" class="text-slate-700 hover:text-white transition">Inicio</a>
+                <a href="/pages/tools.html" class="text-slate-700 hover:text-white transition">Herramientas</a>
+                <a href="/pages/about.html" class="text-slate-700 hover:text-white transition">Nosotros</a>
+                <a href="/pages/contact.html" class="text-slate-700 hover:text-white transition">Contacto</a>
             </nav>
+            <div class="flex items-center space-x-4">
+                <li><a href="carrito.html" class="text-slate-700 hover:text-white"><i
+                            class="fas fa-shopping-cart mr-1"></i> (<span id="cart-count">0</span>)</a></li>
+                <a href="/pages/login.html"
+                    class="bg-emerald-500 text-white px-3 py-2 whitespace-nowrap rounded-md hover:bg-emerald-600 transition">Iniciar
+                    Sesión</a>
+                <a href="/pages/register.html"
+                    class="bg-emerald-500 text-white px-3 py-2  rounded-md hover:bg-emerald-600 transition">Registrarse</a>
+            </div>
+            <button id="mobile-menu-button"
+                class="md:hidden text-white ml-2 p-1 bg-emerald-500 hover:bg-emerald-600 transition rounded-lg ">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                </svg>
+            </button>
         </div>
     </header>
-    <div id="page-content">
-        <div class="cart-page">
-            <h2>Tu Carrito de Alquiler</h2>
-            <div id="cart-items-container">
-            </div>
 
-            <div class="cart-summary">
-                <div class="summary-details">
-                    <p>Subtotal: <span id="cart-subtotal">0.00</span> $</p>
-                    <p>Impuestos: <span id="cart-taxes">0.00</span> $</p>
-                    <p class="total">Total: <span id="cart-total">0.00</span> $</p>
+    <main class="flex-grow container mx-auto px-4 py-8">
+        <h1 class="text-3xl font-bold text-slate-800 mb-8">Tu Carrito de Compras</h1>
+
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <div class="lg:w-2/3">
+                <div class="bg-white rounded-lg shadow-md overflow-hidden mb-4">
+
+                    <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row">
+                        <div class="flex-shrink-0 mb-4 sm:mb-0">
+                            <img src="../assets/images/tools/taladro.jpg" alt="Taladro Percutor"
+                                class="w-32 h-32 object-cover rounded">
+                        </div>
+                        <div class="flex-grow sm:pl-4">
+                            <div class="flex justify-between">
+                                <h3 class="text-lg font-semibold text-slate-800">Taladro Percutor 750W</h3>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="text-gray-600 mb-2">Marca: Bosch</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <div class="flex items-center border border-gray-300 rounded">
+                                    <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">-</button>
+                                    <span class="px-3 py-1">1</span>
+                                    <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">+</button>
+                                </div>
+                                <span class="text-lg font-semibold text-emerald-600">$25.99/día</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="p-4 border-b border-gray-200 flex flex-col sm:flex-row">
+                        <div class="flex-shrink-0 mb-4 sm:mb-0">
+                            <img src="../assets/images/tools/esmeril.jpg" alt="Esmeril Angular"
+                                class="w-32 h-32 object-cover rounded">
+                        </div>
+                        <div class="flex-grow sm:pl-4">
+                            <div class="flex justify-between">
+                                <h3 class="text-lg font-semibold text-slate-800">Esmeril Angular 4.5"</h3>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="text-gray-600 mb-2">Marca: DeWalt</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <div class="flex items-center border border-gray-300 rounded">
+                                    <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">-</button>
+                                    <span class="px-3 py-1">1</span>
+                                    <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">+</button>
+                                </div>
+                                <span class="text-lg font-semibold text-emerald-600">$18.50/día</span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="p-4 flex flex-col sm:flex-row">
+                        <div class="flex-shrink-0 mb-4 sm:mb-0">
+                            <img src="../assets/images/tools/sierra.jpg" alt="Sierra Circular"
+                                class="w-32 h-32 object-cover rounded">
+                        </div>
+                        <div class="flex-grow sm:pl-4">
+                            <div class="flex justify-between">
+                                <h3 class="text-lg font-semibold text-slate-800">Sierra Circular 1200W</h3>
+                                <button class="text-red-500 hover:text-red-700">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none"
+                                        viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <p class="text-gray-600 mb-2">Marca: Makita</p>
+                            <div class="flex items-center justify-between mt-4">
+                                <div class="flex items-center border border-gray-300 rounded">
+                                    <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">-</button>
+                                    <span class="px-3 py-1">1</span>
+                                    <button class="px-3 py-1 text-gray-600 hover:bg-gray-100">+</button>
+                                </div>
+                                <span class="text-lg font-semibold text-emerald-600">$32.75/día</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="cart-actions">
-                    <button class="view-all" id="continue-shopping">Seguir Alquilando</button>
-                    <button class="view-all" id="checkout-btn">Finalizar Alquiler</button>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <h3 class="text-lg font-semibold text-slate-800 mb-4">¿Necesitas algo más?</h3>
+                    <a href="/pages/tools.html" class="flex items-center text-emerald-500 hover:text-emerald-700">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                        Continuar buscando herramientas
+                    </a>
+                </div>
+            </div>
+
+            <div class="lg:w-1/3">
+                <div class="bg-white rounded-lg shadow-md p-6 sticky top-4">
+                    <h2 class="text-xl font-bold text-slate-800 mb-4">Resumen del Pedido</h2>
+
+                    <div class="space-y-3 mb-6">
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Taladro Percutor (1 día)</span>
+                            <span>$25.99</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Esmeril Angular (1 día)</span>
+                            <span>$18.50</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span class="text-gray-600">Sierra Circular (1 día)</span>
+                            <span>$32.75</span>
+                        </div>
+                        <div class="border-t border-gray-200 pt-2 mt-2">
+                            <div class="flex justify-between font-semibold">
+                                <span>Subtotal</span>
+                                <span>$77.24</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between text-sm text-gray-500">
+                            <span>Impuestos (10%)</span>
+                            <span>$7.72</span>
+                        </div>
+                    </div>
+
+                    <div class="border-t border-gray-200 pt-4 mb-6">
+                        <div class="flex justify-between text-lg font-bold">
+                            <span>Total</span>
+                            <span class="text-emerald-600">$84.96</span>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="fecha-alquiler" class="block text-sm font-medium text-gray-700 mb-1">Fecha de
+                            Alquiler</label>
+                        <input type="date" id="fecha-alquiler"
+                            class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                    </div>
+
+                    <button
+                        class="w-full bg-emerald-500 text-white py-3 px-4 rounded-md hover:bg-emerald-600 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition font-semibold">
+                        Proceder al Pago
+                    </button>
+
+                    <p class="text-xs text-gray-500 mt-3 text-center">
+                        Al hacer clic en "Proceder al Pago", aceptas nuestros <a href="#"
+                            class="text-emerald-500 hover:underline">Términos y Condiciones</a>
+                    </p>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <footer class="bg-blue-400 text-white py-8">
         <div class="container mx-auto px-4">
