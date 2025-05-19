@@ -1,4 +1,4 @@
-// Main JavaScript file for the Rental Platform
+import "./api/auth.js";
 
 // Wait for the DOM to be fully loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -44,40 +44,6 @@ document.addEventListener("DOMContentLoaded", () => {
         mobileSidebar.classList.add("-translate-x-full")
       })
     }
-  }
-
-  // Login form submission
-  const loginForm = document.getElementById("login-form")
-
-  if (loginForm) {
-    loginForm.addEventListener("submit", (event) => {
-      event.preventDefault()
-
-      const email = document.getElementById("email").value
-      const password = document.getElementById("password").value
-
-      // Basic validation
-      if (!email || !password) {
-        alert("Por favor, complete todos los campos.")
-        return
-      }
-
-      // Here you would normally send the data to your backend API
-      // For demonstration purposes, we'll just simulate a successful login
-      console.log("Iniciando sesión con:", { email, password })
-
-      // Simulate API call delay
-      setTimeout(() => {
-        // Redirect based on role (this would normally be determined by the backend)
-        if (email.includes("admin")) {
-          window.location.href = "/pages/admin/dashboard.html"
-        } else if (email.includes("provider")) {
-          window.location.href = "/pages/provider/dashboard.html"
-        } else {
-          window.location.href = "/pages/client/dashboard.html"
-        }
-      }, 1000)
-    })
   }
 
   // Tool search functionality

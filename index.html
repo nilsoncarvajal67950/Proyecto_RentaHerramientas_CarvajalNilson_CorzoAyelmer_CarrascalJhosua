@@ -26,25 +26,35 @@
 
 <body class="bg-stone-50 font-inter text-gray-700">
     <header class="bg-blue-400 shadow-sm">
-        <div class="container mx-auto px-4 py-4 relative">
-            <div class="flex items-center justify-between">
-                <div class="flex space-x-4">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div>
                     <img src="./assets/images/icons/logo-transparente.png" alt="Alkile Logo" class="h-16 w-auto">
                 </div>
-                <p class="text-slate-700  text-2xl hidden md:block">Alquila herramientas por el tiempo que las necesitas
-                </p>
-                <div class="text-right text-sm">
-                    <p>3164938507 - 3336475416</p>
-                    <p>contacto@alkile.com</p>
+
+                <div class="md:text-right text-center">
+                    <p class="text-sm font-semibold text-gray-100">3164938507 - 3336475416</p>
+                    <a href="mailto:contactsupport@gmail.com" class="text-sm font-bold text-gray-100">contacto@alkile.com</a>
                 </div>
             </div>
 
-            <nav class="mt-4 flex items-center justify-between">
-                <ul class="flex space-x-6">
-                    <li><a href="index.html" class="text-slate-700 hover:text-white">INICIO</a></li>
-                    <li id="user-menu"><a href="pages/login.html" class="text-slate-700 hover:text-white"><i
-                                class="fas fa-user mr-1"></i> MI CUENTA</a></li>
-                    <li><a href="pages/carrito.html" class="text-slate-700 hover:text-white"><i class="fas fa-shopping-cart mr-1"></i> (<span id="cart-count">0</span>)</a></li>
+            <nav class="mt-4">
+                <ul class="font-bold text-white flex  flex-wrap justify-center md:justify-start gap-4 md:gap-6">
+                    <li>
+                        <a href="index.html" class="hover:text-gray-600 transition-colors">
+                            INICIO
+                        </a>
+                    </li>
+                    <li id="user-menu">
+                        <a href="pages/login.html" class="hover:text-gray-600 transition-colors">
+                            <i class="fas fa-user mr-1"></i> MI CUENTA
+                        </a>
+                    </li>
+                    <li>
+                        <a href="pages/carrito.html" class="hover:text-gray-600 transition-colors">
+                            <i class="fas fa-shopping-cart mr-1"></i> (<span id="cart-count">0</span>)
+                        </a>
+                    </li>
                 </ul>
             </nav>
         </div>
@@ -162,7 +172,7 @@
         </div>
     </footer>
 
-    <script src="../js/app.js"></script>
+    <script type="module" src="../js/app.js"></script>
 </body>
 
 </html>

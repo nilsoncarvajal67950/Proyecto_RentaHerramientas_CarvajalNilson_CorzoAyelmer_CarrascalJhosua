@@ -33,10 +33,10 @@
                     class="bg-emerald-500 text-white px-3 py-2 whitespace-nowrap rounded-md hover:bg-emerald-600 transition">Iniciar
                     Sesión</a>
                 <a href="/pages/register.html"
-                    class="bg-emerald-500 text-white px-3 py-2  rounded-md hover:bg-emerald-600 transition">Registrarse</a>
+                    class="bg-emerald-500 text-white px-3 py-2 rounded-md hover:bg-emerald-600 transition">Registrarse</a>
             </div>
             <button id="mobile-menu-button"
-                class="md:hidden text-white ml-2 p-1 bg-emerald-500 hover:bg-emerald-600 transition rounded-lg ">
+                class="md:hidden text-white ml-2 p-1 hover:bg-emerald-600 transition rounded-lg ">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
@@ -54,7 +54,8 @@
                 <a href="/pages/contact.html"
                     class="block text-white bg-emerald-500 hover:bg-emerald-600 transition  py-2 px-4 border border-emerald-400 rounded-lg">Contacto</a>
                 <a href="/pages/login.html"
-                    class="block text-white bg-emerald-500 hover:bg-emerald-600 transition  py-2 px-4 border border-emerald-400 rounded-lg">Iniciar Sesión</a>
+                    class="block text-white bg-emerald-500 hover:bg-emerald-600 transition  py-2 px-4 border border-emerald-400 rounded-lg">Iniciar
+                    Sesión</a>
                 <a href="/pages/register.html"
                     class="block text-white bg-emerald-500 hover:bg-emerald-600 transition  py-2 px-4 border border-emerald-400 rounded-lg">Registrarse</a>
             </div>
@@ -68,30 +69,55 @@
                     ingresa tu informacion para registrarte
                 </p>
             </div>
-            <form id="login-form" class="py-6 px-8">
+            <form id="register-form" class="py-6 px-8">
+                <!-- Username -->
                 <div class="mb-4">
-                    <label for="name" class="block text-slate-700 text-sm font-medium mb-2">Nombre completo</label>
-                    <input type="name" id="name" name="name"
+                    <label for="username" class="block text-slate-700 text-sm font-medium mb-2">Nombre completo</label>
+                    <input type="text" id="username" name="username"
                         class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         required />
                 </div>
+                <!-- email -->
                 <div class="mb-4">
-                    <label for="email" class="block text-slate-700 text-sm font-medium mb-2">Correo Electrónico</label>
+                    <label for="email" class="block text-slate-700 text-sm font-medium mb-2">Correo electrónico</label>
                     <input type="email" id="email" name="email"
                         class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         required />
                 </div>
+
+                <!-- password -->
                 <div class="mb-6">
-                    <label for="password" class="block text-slate-700 text-sm font-medium mb-2 ">Contraseña</label>
+                    <label for="password" class="block text-slate-700 text-sm font-medium mb-2">Contraseña</label>
                     <input type="password" id="password" name="password"
                         class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
                         required />
                 </div>
+
+                <!-- address -->
                 <div class="mb-6">
-                    <button type="submit"
-                        class="w-full bg-emerald-400 text-white py-2 px-4 rounded-md hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition">
-                        crear cuenta
-                    </button>
+                    <label for="address" class="block text-slate-700 text-sm font-medium mb-2">Contraseña</label>
+                    <input type="text" id="address" name="address"
+                        class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        required />
+                </div>
+
+                <!-- phone -->
+                <div class="mb-6">
+                    <label for="phone" class="block text-slate-700 text-sm font-medium mb-2">Contraseña</label>
+                    <input type="number" id="phone" name="phone"
+                        class="w-full px-3 py-2 border border-emerald-600 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                        required />
+                </div>
+                <button type="submit"
+                    class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600 transition">
+                    Registrarse
+                </button>
+
+                <p class="text-center text-sm text-gray-700 mt-4">
+                    ¿Ya tienes cuenta?
+                    <a href="/pages/login.html" class="text-emerald-500 hover:text-gray-700 font-medium">Inicia sesión
+                        aquí</a>
+                </p>
             </form>
         </div>
     </section>
@@ -110,7 +136,9 @@
         </div>
     </footer>
 
-    <script src="../js/app.js"></script>
+    <script type="module" src="../js/api/enviroment.js"></script>
+    <script type="module" src="../js/api/auth.js"></script>
+    <script type="module" src="../js/app.js"></script>
 </body>
 
 </html>
