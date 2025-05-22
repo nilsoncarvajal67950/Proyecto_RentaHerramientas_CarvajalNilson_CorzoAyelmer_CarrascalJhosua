@@ -1,77 +1,61 @@
-class Header extends HTMLElement {
-    constructor() {
-    super();
-    this.shadowDOM = this.attachShadow({ mode: "open" });
-    this.render();
-    }
-
-    connectedCallback() {
-    this.updateCartCount();
-    this.loadExternalStyles();
-    }
-
-    updateCartCount() {
-    const cartCount = this.shadowDOM.getElementById("cart-count");
-    if (cartCount) {
-        const cartItems = JSON.parse(localStorage.getItem("cart")) || [];
-        cartCount.textContent = cartItems.length;
-    }
-    }
-
-    loadExternalStyles() {
-    const tailwindLink = document.createElement("link");
-    tailwindLink.rel = "stylesheet";
-    tailwindLink.href = "https://cdn.tailwindcss.com";
-
-    const fontAwesomeLink = document.createElement("link");
-    fontAwesomeLink.rel = "stylesheet";
-    fontAwesomeLink.href =
-        "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css";
-
-    this.shadowDOM.appendChild(tailwindLink);
-    this.shadowDOM.appendChild(fontAwesomeLink);
+class Header {
+    constructor(authService) {
+        this.authService = authService;
+        this.loginNav = document.getElementById('login-nav');
+        this.logoutNav = document.getElementById('logout-nav');
+        this.userInfo = document.getElementById('user-info');
+        this.usernameDisplay = document.getElementById('username-display');
+        this.roleDisplay = document.getElementById('role-display');
     }
 
     render() {
-    this.shadowDOM.innerHTML = `
-        <div class="bg-blue-400 shadow-sm">
-        <div class="container mx-auto px-4 py-4">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div>
-                <img src="./assets/images/icons/logo-transparente.png" alt="Alkile Logo" class="h-16 w-auto">
-            </div>
+        this.setupLogout();
+    }
 
-            <div class="md:text-right text-center">
-                <p class="text-sm font-semibold text-gray-100">3164938507 - 3336475416</p>
-                <a href="mailto:contactsupport@gmail.com" class="text-sm font-bold text-gray-100">contacto@alkile.com</a>
-            </div>
-            </div>
+    updateAuthState(isAuthenticated) {
+        if (isAuthenticated) {
+            this.loginNav.style.display = 'none';
+            this.logoutNav.style.display = 'block';
+            this.userInfo.style.display = 'block';
 
-            <nav class="mt-4">
-            <ul class="font-bold text-white flex flex-wrap justify-center md:justify-start gap-4 md:gap-6">
-                <li>
-                <a href="index.html" class="hover:text-gray-600 transition-colors">
-                    INICIO
-                </a>
-                </li>
-                <li id="user-menu">
-                <a href="pages/login.html" class="hover:text-gray-600 transition-colors">
-                    <i class="fas fa-user mr-1"></i> MI CUENTA
-                </a>
-                </li>
-                <li>
-                <a href="pages/carrito.html" class="hover:text-gray-600 transition-colors">
-                    <i class="fas fa-shopping-cart mr-1"></i> (<span id="cart-count">0</span>)
-                </a>
-                </li>
-            </ul>
-            </nav>
-        </div>
-        </div>
-    `;
+            const username = this.authService.getUsername();
+            const role = this.authService.getUserRole();
+
+            this.usernameDisplay.textContent = username;
+            
+            let roleText = '';
+            switch(role) {
+                case 'ADMIN':
+                    roleText = 'Administrador';
+                    break;
+                case 'SUPPLIER':
+                    roleText = 'Proveedor';
+                    break;
+                case 'CUSTOMER':
+                    roleText = 'Cliente';
+                    break;
+                default:
+                    roleText = role;
+            }
+            
+            this.roleDisplay.textContent = roleText;
+        } else {
+            this.loginNav.style.display = 'block';
+            this.logoutNav.style.display = 'none';
+            this.userInfo.style.display = 'none';
+        }
+    }
+
+    setupLogout() {
+        document.getElementById('logout-btn').addEventListener('click', (e) => {
+            e.preventDefault();
+            this.authService.logout();
+            this.updateAuthState(false);
+            
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('login').classList.add('active');
+        });
     }
 }
-
-customElements.define("alkile-header", Header);
 
 export default Header;
