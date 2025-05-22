@@ -70,7 +70,7 @@ class App {
 
     this.reservationList = new ReservationList(
       this.reservationService,
-      this.handleCancelReservation.bind(this)
+      this.cancelReservation.bind(this)
     );
     this.reservationForm = new ReservationForm(
       this.reservationService,
@@ -261,17 +261,20 @@ class App {
   }
 
   async handleDeleteTool(toolId) {
-    if (confirm('¿Estás seguro de que deseas eliminar esta herramienta?')) {
-      try {
-        await this.toolService.deleteTool(toolId);
-        this.toolList.render();
-        window.showToast('Herramienta eliminada correctamente', 'success');
-      } catch (error) {
-        console.error('Error deleting tool:', error);
-        window.showToast(`Error al eliminar herramienta: ${error.message}`, 'error');
-      }
+    try {
+        if (confirm("¿Estás seguro de que deseas eliminar esta herramienta? Esto también eliminará todas las reservas asociadas.")) {
+            await this.toolService.deleteTool(toolId);
+            window.showToast("Herramienta eliminada correctamente", "success");
+            this.toolList.render();
+        }
+    } catch (error) {
+        console.error("Error deleting tool:", error);
+        const errorMsg = error.message.includes('viola la llave foránea') 
+            ? "No se puede eliminar porque tiene reservas asociadas" 
+            : error.message;
+        window.showToast(`Error al eliminar herramienta: ${errorMsg}`, "error");
     }
-  }
+}
 
   handleReserveTool(toolId) {
     this.navigateTo('reservations');
@@ -335,18 +338,11 @@ class App {
   }
 
 
-  async handleCancelReservation(reservationId) {
-    if (confirm('¿Estás seguro de que deseas cancelar esta reserva?')) {
-      try {
-        await this.reservationService.cancelReservation(reservationId);
-        this.reservationList.render();
-        window.showToast('Reserva cancelada correctamente', 'success');
-      } catch (error) {
-        console.error('Error canceling reservation:', error);
-        window.showToast(`Error al cancelar reserva: ${error.message}`, 'error');
-      }
-    }
-  }
+  async cancelReservation(id) {
+    return this.apiService.request(`/alkile/reservations/${id}/cancel`, {
+        method: 'PUT'
+    });
+}
 
   handleReservationSubmitSuccess() {
     this.reservationList.render();

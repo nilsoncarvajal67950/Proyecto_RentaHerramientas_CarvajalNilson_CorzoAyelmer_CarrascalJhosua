@@ -15,7 +15,7 @@ class ReservationService {
   }
 
   async cancelReservation(id) {
-    return this.apiService.request(`/alkile/reservations/${id}`, {
+    return this.apiService.request(`/alkile/reservations/${id}/canceled`, {
       method: 'PUT',
       body: JSON.stringify({ status: 'CANCELED' })
     });

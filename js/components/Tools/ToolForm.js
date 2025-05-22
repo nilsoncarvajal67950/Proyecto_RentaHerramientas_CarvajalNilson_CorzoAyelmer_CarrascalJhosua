@@ -13,14 +13,16 @@ class ToolForm {
     }
 
     async openForCreate() {
-        await Promise.all([
-            this.loadCategories(),
-            this.loadSuppliers()
-        ]);
-        this.title.textContent = "Agregar Herramienta";
-        document.getElementById("tool-id").value = "";
-        this.form.reset();
-        this.container.style.display = "block";
+        try {
+            await Promise.all([this.loadCategories(), this.loadSuppliers()]);
+            this.title.textContent = "Agregar Herramienta";
+            document.getElementById("tool-id").value = "";
+            this.form.reset();
+            this.container.style.display = "block";
+        } catch (error) {
+            console.error("Error opening tool form:", error);
+            window.showToast("Error al cargar formulario", "error");
+        }
     }
 
     async openForEdit(toolId) {
@@ -28,22 +30,30 @@ class ToolForm {
             const [tool, categories, suppliers] = await Promise.all([
                 this.toolService.getToolById(toolId),
                 this.loadCategories(),
-                this.loadSuppliers()
+                this.loadSuppliers(),
             ]);
+
+            if (!tool) {
+                throw new Error("Herramienta no encontrada");
+            }
 
             this.title.textContent = "Editar Herramienta";
             document.getElementById("tool-id").value = tool.id;
-            document.getElementById("tool-name").value = tool.name;
-            document.getElementById("tool-description").value = tool.description;
-            document.getElementById("tool-daily-cost").value = tool.dailyCost;
-            document.getElementById("tool-stock").value = tool.stock;
-            document.getElementById("tool-category").value = tool.categoryId;
-            document.getElementById("tool-supplier").value = tool.supplier.id || "";
+            document.getElementById("tool-name").value = tool.name || "";
+            document.getElementById("tool-description").value =
+                tool.description || "";
+            document.getElementById("tool-daily-cost").value = tool.dailyCost || "0";
+            document.getElementById("tool-stock").value = tool.stock || "0";
+            document.getElementById("tool-category").value = tool.categoryId || "";
+            document.getElementById("tool-supplier").value = tool.supplier?.id || "";
 
             this.container.style.display = "block";
         } catch (error) {
             console.error("Error loading tool for edit:", error);
-            alert(`Error al cargar herramienta: ${error.message}`);
+            window.showToast(
+                `Error al cargar herramienta: ${error.message}`,
+                "error"
+            );
         }
     }
 
@@ -52,14 +62,19 @@ class ToolForm {
             const categories = await this.categoryService.getCategories();
             const select = document.getElementById("tool-category");
 
-            select.innerHTML = '<option value="">Seleccione categoría</option>' +
-                categories.map(category =>
-                    `<option value="${category.id}">${category.name}</option>`
-                ).join("");
+            select.innerHTML =
+                '<option value="">Seleccione categoría</option>' +
+                categories
+                    .map(
+                        (category) =>
+                            `<option value="${category.id}">${category.name}</option>`
+                    )
+                    .join("");
 
             return categories;
         } catch (error) {
             console.error("Error loading categories:", error);
+            window.showToast("Error al cargar categorías", "error");
             return [];
         }
     }
@@ -69,10 +84,14 @@ class ToolForm {
             const suppliers = await this.supplierService.getSuppliers();
             const select = document.getElementById("tool-supplier");
 
-            select.innerHTML = '<option value="">Seleccione proveedor</option>' +
-                suppliers.map(supplier =>
-                    `<option value="${supplier.id}">${supplier.company}</option>`
-                ).join("");
+            select.innerHTML =
+                '<option value="">Seleccione proveedor</option>' +
+                suppliers
+                    .map(
+                        (supplier) =>
+                            `<option value="${supplier.id}">${supplier.company}</option>`
+                    )
+                    .join("");
 
             return suppliers;
         } catch (error) {
@@ -86,23 +105,26 @@ class ToolForm {
         this.form.addEventListener("submit", async (e) => {
             e.preventDefault();
 
-            const toolData = this.getFormData();
-            if (!toolData) return;
-
             try {
+                const toolData = this.getFormData();
                 const toolId = document.getElementById("tool-id").value;
 
                 if (toolId) {
                     await this.toolService.updateTool(toolId, toolData);
+                    window.showToast("Herramienta actualizada correctamente", "success");
                 } else {
                     await this.toolService.createTool(toolData);
+                    window.showToast("Herramienta creada correctamente", "success");
                 }
 
                 this.container.style.display = "none";
                 this.onSubmitSuccess();
             } catch (error) {
                 console.error("Error saving tool:", error);
-                alert(`Error al guardar herramienta: ${error.message}`);
+                window.showToast(
+                    `Error al guardar herramienta: ${this.getErrorMessage(error)}`,
+                    "error"
+                );
             }
         });
 
@@ -112,32 +134,46 @@ class ToolForm {
     }
 
     getFormData() {
-        const toolId = document.getElementById("tool-id").value;
         const name = document.getElementById("tool-name").value.trim();
-        const description = document.getElementById("tool-description").value.trim();
-        const dailyCost = parseFloat(document.getElementById("tool-daily-cost").value);
+        const description = document
+            .getElementById("tool-description")
+            .value.trim();
+        const dailyCost = parseFloat(
+            document.getElementById("tool-daily-cost").value
+        );
         const stock = parseInt(document.getElementById("tool-stock").value);
         const categoryId = document.getElementById("tool-category").value;
         const supplierId = document.getElementById("tool-supplier").value;
 
-        if (!name || !description || isNaN(dailyCost) || isNaN(stock) || !categoryId || categoryId === "" || !supplierId) {
-            if (!categoryId) {
-                alert("Debe seleccionar una categoría");
-            } else {
-                alert("Por favor complete todos los campos requeridos correctamente");
-            }
-            return null;
-        }
+        if (!name) throw new Error("El nombre es requerido");
+        if (!description) throw new Error("La descripción es requerida");
+        if (isNaN(dailyCost) || dailyCost <= 0)
+            throw new Error("El costo diario debe ser un número positivo");
+        if (isNaN(stock) || stock < 0)
+            throw new Error("El stock debe ser un número positivo o cero");
+        if (!categoryId) throw new Error("Debe seleccionar una categoría");
+        if (!supplierId) throw new Error("Debe seleccionar un proveedor");
 
         return {
-            ...(toolId && { id: Number(toolId) }),
             name,
             description,
             dailyCost,
             stock,
-            categoryId: Number(categoryId),
-            ...(supplierId && { supplier: { id: Number(supplierId) } })
+            category: { id: Number(categoryId) },
+            supplier: { id: Number(supplierId) },
         };
+    }
+
+    getErrorMessage(error) {
+        if (error.response) {
+            try {
+                const data = JSON.parse(error.response);
+                return data.message || error.message;
+            } catch {
+                return error.message;
+            }
+        }
+        return error.message;
     }
 }
 
