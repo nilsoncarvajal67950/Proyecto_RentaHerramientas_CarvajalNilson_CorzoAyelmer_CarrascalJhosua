@@ -7,24 +7,23 @@
     <title>AlkileApp</title>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="shortcut icon" href="./assets/icono.jpg" type="image/x-icon">
+    <link rel="shortcut icon" href="./assets/icono.jpg" type="image/x-icon" />
 </head>
 
 <body>
     <header>
         <div class="container">
-            <img src="./assets/logo.png" alt="" width="200px">
+            <img src="./assets/logo.png" alt="" width="200px" />
             <nav id="main-nav">
                 <ul>
-                    <li><a href="#" class="nav-link" data-page="home">Inicio</a></li>
                     <li>
-                        <a href="#" class="nav-link" data-page="tools">Herramientas</a>
+                        <a href="#" class="nav-link" data-page="tools" id="menu-tools">Herramientas</a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link" data-page="reservations">Reservas</a>
+                        <a href="#" class="nav-link" data-page="reservations" id="menu-reservations">Reservas</a>
                     </li>
                     <li>
-                        <a href="#" class="nav-link" data-page="suppliers">Proveedores</a>
+                        <a href="#" class="nav-link" data-page="suppliers" id="menu-suppliers">Proveedores</a>
                     </li>
                     <li id="login-nav">
                         <a href="#" class="nav-link" data-page="login">Iniciar Sesión</a>
@@ -34,7 +33,6 @@
                     </li>
                 </ul>
             </nav>
-
         </div>
     </header>
 
@@ -46,8 +44,10 @@
                     <div class="user-icon">
                         <i class="fas fa-user-circle fa-3x"></i>
                     </div>
-                    <div class="user-details" style="color: black;">
-                        <p><strong>Usuario:</strong> <span id="username-display"></span></p>
+                    <div class="user-details" style="color: black">
+                        <p>
+                            <strong>Usuario:</strong> <span id="username-display"></span>
+                        </p>
                         <p><strong>Rol:</strong> <span id="role-display"></span></p>
                     </div>
                 </div>
@@ -56,23 +56,33 @@
                 <div class="dashboard-card">
                     <i class="fas fa-tools fa-3x"></i>
                     <h3>Herramientas</h3>
-                    <p>Explora nuestra amplia selección de herramientas disponibles para alquiler.</p>
-                    <button class="btn btn-secondary nav-btn" data-page="tools">Ver Herramientas</button>
+                    <p>
+                        Explora nuestra amplia selección de herramientas disponibles para
+                        alquiler.
+                    </p>
+                    <button class="btn btn-secondary nav-btn" data-page="tools">
+                        Ver Herramientas
+                    </button>
                 </div>
                 <div class="dashboard-card">
                     <i class="fas fa-calendar-alt fa-3x"></i>
                     <h3>Reservas</h3>
-                    <p>Gestiona tus reservas activas y revisa el historial de alquileres.</p>
-                    <button class="btn btn-secondary nav-btn" data-page="reservations">Ver Reservas</button>
+                    <p>
+                        Gestiona tus reservas activas y revisa el historial de alquileres.
+                    </p>
+                    <button class="btn btn-secondary nav-btn" data-page="reservations">
+                        Ver Reservas
+                    </button>
                 </div>
                 <div class="dashboard-card">
                     <i class="fas fa-truck fa-3x"></i>
                     <h3>Proveedores</h3>
                     <p>Conoce a nuestros proveedores de confianza y sus productos.</p>
-                    <button class="btn btn-secondary nav-btn" data-page="suppliers">Ver Proveedores</button>
+                    <button class="btn btn-secondary nav-btn" data-page="suppliers">
+                        Ver Proveedores
+                    </button>
                 </div>
             </div>
-
         </section>
 
         <section id="login" class="page">
@@ -107,7 +117,7 @@
             </div>
             <div class="filters">
                 <div class="search-container">
-                    <input type="text" id="tool-search" placeholder="Buscar herramientas...">
+                    <input type="text" id="tool-search" placeholder="Buscar herramientas..." />
                     <button id="search-btn"><i class="fas fa-search"></i></button>
                 </div>
                 <div class="category-filter">
@@ -162,9 +172,13 @@
             <div class="reservation-status-filter">
                 <button class="status-btn active" data-status="all">Todas</button>
                 <button class="status-btn" data-status="PENDING">Pendientes</button>
-                <button class="status-btn" data-status="CONFIRMED">Confirmadas</button>
+                <button class="status-btn" data-status="CONFIRMED">
+                    Confirmadas
+                </button>
                 <button class="status-btn" data-status="CANCELED">Canceladas</button>
-                <button class="status-btn" data-status="COMPLETED">Completadas</button>
+                <button class="status-btn" data-status="COMPLETED">
+                    Completadas
+                </button>
             </div>
             <div id="reservations-container"></div>
             <div id="reservation-form-container" class="modal-form" style="display: none">
@@ -267,7 +281,7 @@
         </div>
     </div>
 
-    <div id="loading-spinner" class="spinner-container" style="display: none;">
+    <div id="loading-spinner" class="spinner-container" style="display: none">
         <div class="spinner"></div>
     </div>
 
@@ -278,7 +292,6 @@
             <p>&copy; 2025 AlkileApp - Plataforma de Alquiler de Herramientas</p>
         </div>
     </footer>
-
 
     <script type="module" src="js/main.js"></script>
 </body>

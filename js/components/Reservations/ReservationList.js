@@ -3,7 +3,7 @@ class ReservationList {
         this.reservationService = reservationService;
         this.onCancelReservation = onCancelReservation;
         this.container = document.getElementById('reservations-container');
-        this.allReservations = []; // Para filtrado
+        this.allReservations = []; 
     }
 
     async render() {

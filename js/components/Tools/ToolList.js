@@ -75,7 +75,7 @@ class ToolList {
 
   createToolsHtml(tools, categories) {
     if (tools.length === 0) {
-      return `
+        return `
             <div class="empty-state">
                 <i class="fas fa-tools fa-3x"></i>
                 <h3>No hay herramientas disponibles</h3>
@@ -84,68 +84,86 @@ class ToolList {
         `;
     }
 
-    // Usamos un Map para buscar rápido por categoryId
     const categoryMap = new Map(categories.map((cat) => [cat.id, cat]));
+    const userRole = this.authService.getUserRole();
 
     return tools
-      .map((tool) => {
-        const categoria = tool.categoryId && categoryMap.get(tool.categoryId);
+        .map((tool) => {
+            const categoria = tool.categoryId && categoryMap.get(tool.categoryId);
 
-        return `
-        <div class="card tool-card">
-            <h3>${tool.name}</h3>
-            <p class="tool-description">${tool.description}</p>
+            
+            const canEdit = ['ADMIN', 'SUPPLIER'].includes(userRole);
+            const canDelete = userRole === 'ADMIN';
+            const canReserve = userRole === 'CUSTOMER';
 
-            <div class="tool-details">
-                <p><i class="fas fa-dollar-sign"></i> Costo diario: $${
-                  tool.dailyCost?.toFixed(2) || "0.00"
-                }</p>
-                <p><i class="fas fa-boxes"></i> Stock: ${tool.stock || 0}</p>
-                <p><i class="fas fa-tag"></i> Categoría: ${
-                  categoria ? categoria.name : "Categoría no encontrada"
-                }</p>
-                ${
-                  tool.supplier
-                    ? `<p><i class="fas fa-truck"></i> Proveedor: ${
-                        tool.supplier.company || "Sin proveedor"
-                      }</p>`
-                    : ""
-                }
-            </div>
+            return `
+                <div class="card tool-card">
+                    <h3>${tool.name}</h3>
+                    <p class="tool-description">${tool.description}</p>
 
-            <div class="card-actions">
-                <button class="btn btn-secondary edit-tool" data-id="${
-                  tool.id
-                }">
-                    <i class="fas fa-edit"></i> Editar
-                </button>
-                <button class="btn btn-danger delete-tool" data-id="${tool.id}">
-                    <i class="fas fa-trash"></i> Eliminar
-                </button>
-            </div>
-        </div>
-        `;
-      })
-      .join("");
-  }
+                    <div class="tool-details">
+                        <p><i class="fas fa-dollar-sign"></i> Costo diario: $${
+                            tool.dailyCost?.toFixed(2) || "0.00"
+                        }</p>
+                        <p><i class="fas fa-boxes"></i> Stock: ${tool.stock || 0}</p>
+                        <p><i class="fas fa-tag"></i> Categoría: ${
+                            categoria ? categoria.name : "Categoría no encontrada"
+                        }</p>
+                        ${
+                            tool.supplier
+                                ? `<p><i class="fas fa-truck"></i> Proveedor: ${
+                                    tool.supplier.company || "Sin proveedor"
+                                  }</p>`
+                                : ""
+                        }
+                    </div>
 
+                    <div class="card-actions">
+                        ${canEdit ? `
+                            <button class="btn btn-secondary edit-tool" data-id="${tool.id}">
+                                <i class="fas fa-edit"></i> Editar
+                            </button>
+                        ` : ''}
+
+                        ${canDelete ? `
+                            <button class="btn btn-danger delete-tool" data-id="${tool.id}">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        ` : ''}
+
+                        ${canReserve ? `
+                            <button class="btn btn-success reserve-tool" data-id="${tool.id}">
+                                <i class="fas fa-calendar-check"></i> Reservar
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            `;
+        })
+        .join("");
+}
   setupEventListeners() {
     this.container.addEventListener("click", (e) => {
-      const btn = e.target.closest("button");
-      if (!btn) return;
+        const btn = e.target.closest("button");
+        if (!btn) return;
 
-      const toolId = btn.dataset.id;
-      if (!toolId) return;
+        const toolId = btn.dataset.id;
+        if (!toolId) return;
 
-      if (btn.classList.contains("edit-tool")) {
-        this.onEditTool(toolId);
-      } else if (btn.classList.contains("delete-tool")) {
-        this.onDeleteTool(toolId);
-      } else if (btn.classList.contains("reserve-tool")) {
-        this.onReserveTool(toolId);
-      }
+        const userRole = this.authService.getUserRole();
+        const isEdit = btn.classList.contains("edit-tool");
+        const isDelete = btn.classList.contains("delete-tool");
+        const isReserve = btn.classList.contains("reserve-tool");
+
+        if (isReserve && userRole === "CUSTOMER") {
+            this.onReserveTool(toolId);
+        } else if (isEdit && ['ADMIN', 'SUPPLIER'].includes(userRole)) {
+            this.onEditTool(toolId);
+        } else if (isDelete && userRole === "ADMIN") {
+            this.onDeleteTool(toolId);
+        }
     });
-  }
+}
 }
 
 export default ToolList;
