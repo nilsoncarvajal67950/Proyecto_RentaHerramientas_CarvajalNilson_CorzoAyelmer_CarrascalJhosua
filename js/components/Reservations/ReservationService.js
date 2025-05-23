@@ -4,18 +4,18 @@ class ReservationService {
   }
 
   async getReservations() {
-    return this.apiService.request('/alkile/reservations');
+    return this.apiService.request('api/alkile/reservations');
   }
 
   async createReservation(reservationData) {
-    return this.apiService.request('/alkile/reservations', {
+    return this.apiService.request('api/alkile/reservations', {
       method: 'POST',
       body: JSON.stringify(reservationData)
     });
   }
 
   async cancelReservation(id) {
-    return this.apiService.request(`/api/alkile/reservations/${id}/cancel`, {
+    return this.apiService.request(`/apiapi/alkile/reservations/${id}/cancel`, {
       method: 'PUT',
       body: JSON.stringify({ status: 'CANCELED' })
     });

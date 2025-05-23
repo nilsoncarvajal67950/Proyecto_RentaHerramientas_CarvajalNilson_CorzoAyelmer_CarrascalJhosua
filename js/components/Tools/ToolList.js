@@ -28,11 +28,19 @@ class ToolList {
       ]);
 
       this.allTools = tools.filter((tool) => tool.categoryId != null);
+      this.categories = categories;
 
-      this.container.innerHTML = this.createToolsHtml(
-        this.allTools,
-        categories
-      );
+      
+      console.log("Herramientas cargadas:", this.allTools.map(tool => ({
+        id: tool.id,
+        name: tool.name,
+        imageUrl: tool.ImageUrl, 
+        fullImageUrl: this.getFullImageUrl(tool.ImageUrl),
+        categoryId: tool.categoryId,
+        supplier: tool.supplier
+      })));
+
+      this.container.innerHTML = this.createToolsHtml(this.allTools, categories);
       this.setupEventListeners();
     } catch (error) {
       console.error("Error loading tools:", error);
@@ -49,6 +57,23 @@ class ToolList {
     } finally {
       window.showLoading(false);
     }
+  }
+
+  getFullImageUrl(imagePath) {
+    if (!imagePath) return null;
+    
+    
+    if (imagePath.startsWith('http')) {
+      return imagePath;
+    }
+    
+    
+    if (imagePath.startsWith('/uploads/')) {
+      return `${window.API_BASE_URL || ''}${imagePath}`;
+    }
+    
+    
+    return `${window.API_BASE_URL || ''}/uploads/${imagePath.replace(/^\/?uploads\//, '')}`;
   }
 
   filterTools(searchTerm = "", categoryId = "") {
@@ -75,7 +100,7 @@ class ToolList {
 
   createToolsHtml(tools, categories) {
     if (tools.length === 0) {
-        return `
+      return `
             <div class="empty-state">
                 <i class="fas fa-tools fa-3x"></i>
                 <h3>No hay herramientas disponibles</h3>
@@ -88,82 +113,111 @@ class ToolList {
     const userRole = this.authService.getUserRole();
 
     return tools
-        .map((tool) => {
-            const categoria = tool.categoryId && categoryMap.get(tool.categoryId);
+      .map((tool) => {
+        const categoria = tool.categoryId
+          ? categoryMap.get(tool.categoryId)
+          : null;
 
-            
-            const canEdit = ['ADMIN', 'SUPPLIER'].includes(userRole);
-            const canDelete = userRole === 'ADMIN';
-            const canReserve = userRole === 'CUSTOMER';
+        const canEdit = ["ADMIN", "SUPPLIER"].includes(userRole);
+        const canDelete = userRole === "ADMIN";
+        const canReserve = userRole === "CUSTOMER";
 
-            return `
+        const imageUrl = this.getFullImageUrl(tool.ImageUrl); 
+        const imageHtml = imageUrl
+          ? `<img src="${imageUrl}" alt="Imagen de ${tool.name}" class="tool-image" 
+               onerror="this.onerror=null;this.src='./assets/icono.jpg'" />`
+          : `<div class="no-image"><i class="fas fa-tools"></i> Sin imagen</div>`;
+
+        return `
                 <div class="card tool-card">
-                    <h3>${tool.name}</h3>
-                    <p class="tool-description">${tool.description}</p>
+                    <div class="tool-image-container">
+                        ${imageHtml}
+                    </div>
+                    <h3>${tool.name || "Sin nombre"}</h3>
+                    <p class="tool-description">${
+                      tool.description || "Sin descripción"
+                    }</p>
 
                     <div class="tool-details">
-                        <p><i class="fas fa-dollar-sign"></i> Costo diario: $${
-                            tool.dailyCost?.toFixed(2) || "0.00"
+                        <p><i class="fas fa-dollar-sign"></i> Costo diario: $${(
+                          tool.dailyCost ?? 0
+                        ).toFixed(2)}</p>
+                        <p><i class="fas fa-boxes"></i> Stock: ${
+                          tool.stock ?? 0
                         }</p>
-                        <p><i class="fas fa-boxes"></i> Stock: ${tool.stock || 0}</p>
                         <p><i class="fas fa-tag"></i> Categoría: ${
-                            categoria ? categoria.name : "Categoría no encontrada"
+                          categoria?.name ?? "Categoría no encontrada"
                         }</p>
                         ${
-                            tool.supplier
-                                ? `<p><i class="fas fa-truck"></i> Proveedor: ${
-                                    tool.supplier.company || "Sin proveedor"
-                                  }</p>`
-                                : ""
+                          tool.supplier
+                            ? `
+                            <p><i class="fas fa-truck"></i> Proveedor: ${
+                              tool.supplier.company ?? "Sin proveedor"
+                            }</p>
+                        `
+                            : ""
                         }
                     </div>
 
                     <div class="card-actions">
-                        ${canEdit ? `
+                        ${
+                          canEdit
+                            ? `
                             <button class="btn btn-secondary edit-tool" data-id="${tool.id}">
                                 <i class="fas fa-edit"></i> Editar
                             </button>
-                        ` : ''}
+                        `
+                            : ""
+                        }
 
-                        ${canDelete ? `
+                        ${
+                          canDelete
+                            ? `
                             <button class="btn btn-danger delete-tool" data-id="${tool.id}">
                                 <i class="fas fa-trash"></i> Eliminar
                             </button>
-                        ` : ''}
+                        `
+                            : ""
+                        }
 
-                        ${canReserve ? `
+                        ${
+                          canReserve
+                            ? `
                             <button class="btn btn-success reserve-tool" data-id="${tool.id}">
                                 <i class="fas fa-calendar-check"></i> Reservar
                             </button>
-                        ` : ''}
+                        `
+                            : ""
+                        }
                     </div>
                 </div>
             `;
-        })
-        .join("");
-}
+      })
+      .join("");
+  }
+
   setupEventListeners() {
     this.container.addEventListener("click", (e) => {
-        const btn = e.target.closest("button");
-        if (!btn) return;
+      const btn = e.target.closest("button");
+      if (!btn) return;
 
-        const toolId = btn.dataset.id;
-        if (!toolId) return;
+      const toolId = btn.dataset.id;
+      if (!toolId) return;
 
-        const userRole = this.authService.getUserRole();
-        const isEdit = btn.classList.contains("edit-tool");
-        const isDelete = btn.classList.contains("delete-tool");
-        const isReserve = btn.classList.contains("reserve-tool");
+      const userRole = this.authService.getUserRole();
+      const isEdit = btn.classList.contains("edit-tool");
+      const isDelete = btn.classList.contains("delete-tool");
+      const isReserve = btn.classList.contains("reserve-tool");
 
-        if (isReserve && userRole === "CUSTOMER") {
-            this.onReserveTool(toolId);
-        } else if (isEdit && ['ADMIN', 'SUPPLIER'].includes(userRole)) {
-            this.onEditTool(toolId);
-        } else if (isDelete && userRole === "ADMIN") {
-            this.onDeleteTool(toolId);
-        }
+      if (isReserve && userRole === "CUSTOMER") {
+        this.onReserveTool(toolId);
+      } else if (isEdit && ["ADMIN", "SUPPLIER"].includes(userRole)) {
+        this.onEditTool(toolId);
+      } else if (isDelete && userRole === "ADMIN") {
+        this.onDeleteTool(toolId);
+      }
     });
-}
+  }
 }
 
 export default ToolList;

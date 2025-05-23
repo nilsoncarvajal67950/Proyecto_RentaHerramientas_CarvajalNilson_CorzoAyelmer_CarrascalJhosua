@@ -17,7 +17,7 @@ import SupplierForm from "./Suppliers/SupplierForm.js";
 
 class App {
   constructor() {
-    this.apiService = new ApiService("http://localhost:8080/api");
+    this.apiService = new ApiService("http://localhost:8080/");
     this.authService = new AuthService();
     this.toolService = new ToolService(this.apiService);
     this.categoryService = new CategoryService(this.apiService);
@@ -360,7 +360,7 @@ class App {
   }
 
   async cancelReservation(id) {
-    return this.apiService.request(`/alkile/reservations/${id}/cancel`, {
+    return this.apiService.request(`api/alkile/reservations/${id}/cancel`, {
       method: "PUT",
     });
   }

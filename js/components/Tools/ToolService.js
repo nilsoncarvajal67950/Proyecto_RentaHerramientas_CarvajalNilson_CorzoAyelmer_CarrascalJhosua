@@ -4,29 +4,30 @@ class ToolService {
     }
 
     async getTools() {
-        return this.apiService.request("/alkile/tools");
+        return this.apiService.request("api/alkile/tools");
     }
 
     async getToolById(id) {
-        return this.apiService.request(`/alkile/tools/${id}`);
+        return this.apiService.request(`api/alkile/tools/${id}`);
     }
 
-    async createTool(toolData) {
-        return this.apiService.request("/alkile/tools", {
+    async createToolWithImages(formData) {
+        return this.apiService.request("api/alkile/tools", {
             method: "POST",
-            body: JSON.stringify(toolData),
+            body: formData,
+            headers: {},
         });
     }
 
-    async updateTool(id, toolData) {
-        return this.apiService.request(`/alkile/tools/${id}`, {
+    async updateToolWithImages(id, formData) {
+        return this.apiService.request(`api/alkile/tools/${id}`, {
             method: "PUT",
-            body: JSON.stringify(toolData),
+            body: formData,
         });
     }
 
     async deleteTool(id) {
-        return this.apiService.request(`/alkile/tools/${id}`, {
+        return this.apiService.request(`api/alkile/tools/${id}`, {
             method: "DELETE",
         });
     }
