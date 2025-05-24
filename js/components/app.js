@@ -15,6 +15,7 @@ import SupplierService from "./Suppliers/SupplierService.js";
 import SupplierList from "./Suppliers/SupplierList.js";
 import SupplierForm from "./Suppliers/SupplierForm.js";
 
+window.API_BASE_URL = "http://localhost:8080"
 class App {
   constructor() {
     this.apiService = new ApiService("http://localhost:8080/");

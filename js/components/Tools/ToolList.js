@@ -48,6 +48,7 @@ class ToolList {
             <div class="error-message">
                 <i class="fas fa-exclamation-circle"></i>
                 <p>Error al cargar herramientas: ${error.message}</p>
+                <p>No se esta consumiento el API</p>
                 <button class="btn btn-secondary" id="retry-tools">Reintentar</button>
             </div>
         `;
