@@ -1,18 +1,18 @@
 /* Variables CSS */
 :root {
-  --primary-color: #24866f;
-  --primary-dark: #026947;
+  --primary-color: #4B6382;
+  --primary-dark: #071739;
   --secondary-color: #2c3e50;
   --accent-color: #e74c3c;
   --success-color: #2ecc71;
   --warning-color: #f39c12;
   --danger-color: #e74c3c;
-  --light-color: #ecf0f1;
-  --dark-color: #34495e;
+  --light-color: #E3C39D;
   --text-color: #333;
   --border-radius: 8px;
   --box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   --transition: all 0.3s ease;
+  --background-color: #CDD5DB; 
 }
 
 /* Reset y estilos base */
@@ -26,7 +26,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   line-height: 1.6;
   color: var(--text-color);
-  background-color: #f5f7fa;
+  background-color: var(--background-color);
 }
 
 .container {
@@ -425,7 +425,7 @@ h2 {
 }
 
 .btn-secondary:hover {
-  background-color: var(--dark-color);
+  background-color: var(--primary-dark);
 }
 
 .btn-danger {
