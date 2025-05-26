@@ -47,25 +47,59 @@ class ReservationForm {
       const reservationData = this.getFormData();
       if (!reservationData) return;
 
-      // AÑADE ESTE CÓDIGO DE LOGGING AQUÍ
-      console.log("Submitting reservation:", reservationData);
       try {
-        const response = await this.reservationService.createReservation(
-          reservationData
-        );
-        console.log("Reservation created:", response);
-
+        const response = await this.reservationService.createReservation(reservationData);
+        
+        // Después de crear la reserva, mostrar el botón de factura
+        this.showInvoiceButton(response.id);
+        
         this.container.style.display = "none";
         this.onSubmitSuccess();
       } catch (error) {
-        console.error("Full error details:", error);
-        alert(`Error creating reservation: ${error.message}`);
+        console.error("Error creating reservation:", error);
+        window.showToast(`Error al crear reserva: ${error.message}`, "error");
       }
     });
 
     this.cancelBtn.addEventListener("click", () => {
       this.container.style.display = "none";
     });
+  }
+
+  showInvoiceButton(reservationId) {
+    const invoiceBtn = document.createElement('button');
+    invoiceBtn.className = 'btn invoice-btn';
+    invoiceBtn.innerHTML = '<i class="fas fa-file-invoice-dollar"></i> Factura';
+    invoiceBtn.onclick = () => this.downloadInvoice(reservationId);
+    
+    // Agrega el botón al contenedor de reservas
+    document.getElementById('reservations-container').appendChild(invoiceBtn);
+  }
+
+  async downloadInvoice(reservationId) {
+    try {
+      // Llama al endpoint del backend para generar la factura
+      const response = await fetch(`/api/payments/receipt/reservation/${reservationId}`);
+      
+      if (!response.ok) {
+        throw new Error('Error al generar la factura');
+      }
+      
+      // Crea un blob con la respuesta y descarga el PDF
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `factura_reserva_${reservationId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+      
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+      window.showToast('Error al descargar la factura', 'error');
+    }
   }
 
   setupDateValidation() {

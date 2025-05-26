@@ -6,7 +6,7 @@ class CategoryForm {
     this.container = document.getElementById('category-form-container');
     this.title = document.getElementById('category-form-title');
     this.cancelBtn = document.getElementById('cancel-category');
-    
+
     this.setupForm();
   }
 
@@ -20,12 +20,12 @@ class CategoryForm {
   async openForEdit(categoryId) {
     try {
       const category = await this.categoryService.getCategoryById(categoryId);
-      
+
       this.title.textContent = 'Editar Categoría';
       document.getElementById('category-id').value = category.id;
       document.getElementById('category-name').value = category.name;
       document.getElementById('category-description').value = category.description || '';
-      
+
       this.container.style.display = 'block';
     } catch (error) {
       console.error('Error loading category for edit:', error);
@@ -36,19 +36,19 @@ class CategoryForm {
   setupForm() {
     this.form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      
+
       const categoryData = this.getFormData();
       if (!categoryData) return;
-      
+
       try {
         const categoryId = document.getElementById('category-id').value;
-        
+
         if (categoryId) {
           await this.categoryService.updateCategory(categoryId, categoryData);
         } else {
           await this.categoryService.createCategory(categoryData);
         }
-        
+
         this.container.style.display = 'none';
         this.onSubmitSuccess();
       } catch (error) {

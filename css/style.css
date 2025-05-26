@@ -37,78 +37,172 @@ body {
 }
 
 /* Header y navegación */
+:root {
+  --header-height: 70px;
+  --transition-speed: 0.3s;
+}
+
 header {
   background-color: var(--primary-color);
   color: white;
-  padding: 1rem 0;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  padding: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
   position: sticky;
   top: 0;
-  z-index: 100;
+  z-index: 1000;
+  height: var(--header-height);
+  font-family: 'Segoe UI', system-ui, sans-serif;
 }
 
 header .container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* Logo */
+header .logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 header img {
-  filter: contrast(5);
-  margin: 0;
+  height: 2rem;
+  width: auto;
+  filter: brightness(0) invert(1) drop-shadow(0 1px 1px rgba(0,0,0,0.2));
+  transition: transform 0.3s ease;
 }
 
+header img:hover {
+  transform: scale(1.05);
+}
+
+/* Navegación principal */
 nav ul {
   display: flex;
   list-style: none;
   margin: 0;
   padding: 0;
+  gap: 1rem;
 }
 
 nav li {
-  margin-left: 1.5rem;
-}
-.auth-switch {
-  margin-top: 1rem;
-  text-align: center;
+  position: relative;
 }
 
-.auth-switch a {
-  color: var(--primary-color);
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.auth-switch a:hover {
-  text-decoration: underline;
-}
 nav a {
   color: white;
   text-decoration: none;
   font-weight: 500;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  transition: all var(--transition-speed) ease;
   position: relative;
-  transition: var(--transition);
+  overflow: hidden;
 }
 
 nav a:hover {
-  color: var(--light-color);
+  background-color: rgba(255, 255, 255, 0.15);
+  transform: translateY(-2px);
 }
 
+nav a:active {
+  transform: translateY(0);
+}
+
+/* Efecto de subrayado animado */
 nav a::after {
   content: '';
   position: absolute;
   width: 0;
-  height: 2px;
+  height: 3px;
   bottom: 0;
-  left: 0;
+  left: 50%;
+  transform: translateX(-50%);
   background-color: white;
-  transition: var(--transition);
+  transition: width var(--transition-speed) ease;
+  border-radius: 2px;
 }
 
 nav a:hover::after {
-  width: 100%;
+  width: 70%;
 }
 
+/* Elemento activo */
+nav a.active {
+  background-color: rgba(255, 255, 255, 0.25);
+  font-weight: 600;
+}
+
+nav a.active::after {
+  width: 70%;
+}
+
+/* Menú de autenticación */
+.auth-switch {
+  margin-left: 1.5rem;
+  padding-left: 1.5rem;
+  border-left: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.auth-switch a {
+  color: white;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  transition: all var(--transition-speed) ease;
+  display: inline-block;
+}
+
+.auth-switch a:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  text-decoration: none;
+  transform: translateY(-1px);
+}
+
+.invoice-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 8px 16px;
+  border-radius: 4px;
+  margin: 5px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.invoice-btn:hover {
+  background-color: #218838;
+}
+
+.invoice-btn i {
+  margin-right: 5px;
+}
+
+/* Responsive (ejemplo básico) */
+@media (max-width: 768px) {
+  header .container {
+    padding: 0 1rem;
+  }
+  
+  nav ul {
+    gap: 0.5rem;
+  }
+  
+  nav a {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
+}
 /* Contenido principal */
 main {
   padding: 2rem 0;
