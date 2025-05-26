@@ -47,13 +47,19 @@ class ReservationForm {
       const reservationData = this.getFormData();
       if (!reservationData) return;
 
+      // AÑADE ESTE CÓDIGO DE LOGGING AQUÍ
+      console.log("Submitting reservation:", reservationData);
       try {
-        await this.reservationService.createReservation(reservationData);
+        const response = await this.reservationService.createReservation(
+          reservationData
+        );
+        console.log("Reservation created:", response);
+
         this.container.style.display = "none";
         this.onSubmitSuccess();
       } catch (error) {
-        console.error("Error creating reservation:", error);
-        alert(`Error al crear reserva: ${error.message}`);
+        console.error("Full error details:", error);
+        alert(`Error creating reservation: ${error.message}`);
       }
     });
 
@@ -76,25 +82,30 @@ class ReservationForm {
   }
 
   getFormData() {
-    const toolId = document.getElementById('reservation-tool').value;
-    const startDate = document.getElementById('reservation-start-date').value;
-    const endDate = document.getElementById('reservation-end-date').value;
+    const toolId = parseInt(document.getElementById("reservation-tool").value);
+    const startDateInput = document.getElementById("reservation-start-date").value;
+    const endDateInput = document.getElementById("reservation-end-date").value;
+    const customerId = parseInt(localStorage.getItem("userId"));
 
-    if (!toolId || !startDate || !endDate) {
-        alert('Por favor complete todos los campos');
+    if (!toolId || !startDateInput || !endDateInput) {
+        alert("Por favor complete todos los campos");
         return null;
     }
 
-    if (new Date(startDate) > new Date(endDate)) {
-        alert('La fecha de fin debe ser posterior a la fecha de inicio');
+    const startDate = new Date(startDateInput);
+    const endDate = new Date(endDateInput);
+
+    if (startDate > endDate) {
+        alert("La fecha de fin debe ser posterior a la fecha de inicio");
         return null;
     }
 
     return {
-        toolId,
-        startDate,
-        endDate,
-        status: 'PENDING'
+        toolId: toolId,
+        startDate: startDate.toISOString().split("T")[0],
+        endDate: endDate.toISOString().split("T")[0],
+        customerId: customerId,
+        status: "PENDING"
     };
 }
 }

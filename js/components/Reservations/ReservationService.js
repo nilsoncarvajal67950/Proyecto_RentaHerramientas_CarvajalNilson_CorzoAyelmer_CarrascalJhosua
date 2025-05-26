@@ -7,27 +7,30 @@ class ReservationService {
     const role = localStorage.getItem("userRole");
     const userId = localStorage.getItem("userId");
 
-    return this.apiService.request('/alkile/reservations', {
+    return this.apiService.request("api/alkile/reservations", {
         method: "GET",
         headers: {
             "userId": userId,
-            "role": role
+            "role": role,
+            "Content-Type": "application/json"
         }
     });
 }
 
-
-  async createReservation(reservationData) {
+ async createReservation(reservationData) {
     return this.apiService.request('api/alkile/reservations', {
-      method: 'POST',
-      body: JSON.stringify(reservationData)
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(reservationData) // Send exactly what we formatted
     });
-  }
+}
 
   async cancelReservation(id) {
-    return this.apiService.request(`/apiapi/alkile/reservations/${id}/cancel`, {
-      method: 'PUT',
-      body: JSON.stringify({ status: 'CANCELED' })
+    return this.apiService.request(`api/alkile/reservations/${id}/cancel`, {
+      method: "PUT",
+      body: JSON.stringify({ status: "CANCELED" }),
     });
   }
 }

@@ -2,6 +2,7 @@ class Header {
     constructor(authService) {
         this.authService = authService;
         this.loginNav = document.getElementById('login-nav');
+        this.registerNav = document.getElementById('register-nav');
         this.logoutNav = document.getElementById('logout-nav');
         this.userInfo = document.getElementById('user-info');
         this.usernameDisplay = document.getElementById('username-display');
@@ -15,6 +16,7 @@ class Header {
     updateAuthState(isAuthenticated) {
     if (isAuthenticated) {
         this.loginNav.style.display = 'none';
+        this.registerNav.style.display = 'none';
         this.logoutNav.style.display = 'block';
         this.userInfo.style.display = 'block';
 
@@ -40,6 +42,7 @@ class Header {
 
         this.roleDisplay.textContent = roleText;
     } else {
+        this.registerNav.style.display = 'block';
         this.loginNav.style.display = 'block';
         this.logoutNav.style.display = 'none';
         this.userInfo.style.display = 'none';

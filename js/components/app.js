@@ -1,6 +1,7 @@
 import Header from "./Header.js";
 import AuthService from "../services/AuthService.js";
 import Login from "./Auth/Login.js";
+import Register from "./Auth/Register.js";
 import ApiService from "../services/ApiService.js";
 import ToolService from "./Tools/ToolService.js";
 import ToolList from "./Tools/ToolList.js";
@@ -71,6 +72,12 @@ class App {
       this.reservationService,
       this.toolService,
       this.handleReservationSubmitSuccess.bind(this)
+    );
+
+    this.register = new Register(
+      this.authService, 
+      this.handleAuthChange.bind(this),
+      this.navigateTo.bind(this)
     );
 
     this.init();
@@ -154,6 +161,8 @@ class App {
 
     if (page === "login") {
       this.login.render();
+    } else if (page === "registro") {
+      this.register.render();
     } else if (page === "tools") {
       this.loadToolsPage();
     } else if (page === "reservations") {
