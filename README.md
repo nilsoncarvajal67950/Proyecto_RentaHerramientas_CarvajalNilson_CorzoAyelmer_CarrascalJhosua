@@ -43,7 +43,7 @@ La aplicación está desarrollada con JavaScript vanilla (sin frameworks) siguie
 
 - **Backend (API):**  
   El backend de este proyecto se encuentra en el repositorio:  
-  [https://github.com/nilsoncarvajal67950/Proyecto_RentaHerramientas_CarvajalNilson_CorzoAyelmer_CarrascalJhosua](https://github.com/nilsoncarvajal67950/Proyecto_RentaHerramientas_CarvajalNilson_CorzoAyelmer_CarrascalJhosua)
+  https://github.com/AyelmerCorzoB/Proyecto_RentaHerramientas_CorzoAyelmer_CarvajalNilson_CarrascalJoshua
 
 ## Estructura del Proyecto
 
