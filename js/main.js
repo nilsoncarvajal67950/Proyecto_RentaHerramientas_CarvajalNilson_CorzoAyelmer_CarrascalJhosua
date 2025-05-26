@@ -1,10 +1,8 @@
 import App from './components/app.js';
 
 document.addEventListener('DOMContentLoaded', () => {
-
     const app = new App();
-
-
+    window.app = app; // Hacer app global
     showToast('Bienvenido a AlkileApp', 'info');
 });
 

@@ -37,7 +37,7 @@ class ToolList {
         imageUrl: tool.ImageUrl, 
         fullImageUrl: this.getFullImageUrl(tool.ImageUrl),
         categoryId: tool.categoryId,
-        supplier: tool.supplier
+        supplier: tool.user
       })));
 
       this.container.innerHTML = this.createToolsHtml(this.allTools, categories);
@@ -153,7 +153,7 @@ class ToolList {
                           tool.supplier
                             ? `
                             <p><i class="fas fa-truck"></i> Proveedor: ${
-                              tool.supplier.company ?? "Sin proveedor"
+                              tool.company ?? "Sin proveedor"
                             }</p>
                         `
                             : ""

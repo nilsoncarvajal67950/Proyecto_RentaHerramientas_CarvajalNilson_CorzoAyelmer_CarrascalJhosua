@@ -1,129 +1,107 @@
 class SupplierForm {
   constructor(supplierService, onSubmitSuccess) {
-    this.supplierService = supplierService;
-    this.onSubmitSuccess = onSubmitSuccess;
-    this.form = document.getElementById("supplier-form");
-    this.container = document.getElementById("supplier-form-container");
-    this.title = document.getElementById("supplier-form-title");
-    this.cancelBtn = document.getElementById("cancel-supplier");
-
-    this.setupForm();
-  }
-
-  openForCreate() {
-    this.container.style.display = "block";
-    this.title.textContent = "Agregar Proveedor";
-    this.form.reset();
-    document.getElementById("supplier-id").value = "";
-  }
-
-  async openForEdit(supplierId) {
-    try {
-      const supplier = await this.supplierService.getSupplierById(supplierId);
-
-      if (!supplier) {
-        throw new Error("Proveedor no encontrado");
-      }
-
-      this.title.textContent = "Editar Proveedor";
-      document.getElementById("supplier-id").value = supplier.id;
-      document.getElementById("supplier-taxId").value = supplier.taxId || "";
-      document.getElementById("supplier-company").value =
-        supplier.company || "";
-      document.getElementById("supplier-userId").value = supplier.userId || "";
-      document.getElementById("supplier-rating").value = supplier.rating || "";
-
-      this.container.style.display = "block";
-    } catch (error) {
-      console.error("Error loading supplier for edit:", error);
-      this.showError(`Error al cargar proveedor: ${error.message}`);
-    }
+    this.supplierService = supplierService
+    this.onSubmitSuccess = onSubmitSuccess
+    this.setupForm()
   }
 
   setupForm() {
-    this.form.addEventListener("submit", async (e) => {
-      e.preventDefault();
+    const form = document.getElementById("supplier-form")
+    form.addEventListener("submit", this.handleSubmit.bind(this))
+    document.getElementById("cancel-supplier").addEventListener("click", this.close.bind(this))
 
-      try {
-        const supplierData = this.getFormData();
-        const supplierId = document.getElementById("supplier-id").value;
+    // Mostrar/ocultar campo de contraseña según sea creación o edición
+    const passwordField = document.getElementById("supplier-password-container")
+    const idField = document.getElementById("supplier-id")
 
-        if (supplierId) {
-          await this.supplierService.updateSupplier(supplierId, supplierData);
-          this.showSuccess("Proveedor actualizado exitosamente");
-        } else {
-          await this.supplierService.createSupplier(supplierData);
-          this.showSuccess("Proveedor creado exitosamente");
+    if (passwordField && idField) {
+      idField.addEventListener("change", () => {
+        passwordField.style.display = idField.value ? "none" : "block"
+      })
+    }
+  }
+
+  openForCreate() {
+    document.getElementById("supplier-form-title").textContent = "Agregar Proveedor"
+    document.getElementById("supplier-id").value = ""
+
+    // Mostrar campo de contraseña para nuevos proveedores
+    const passwordField = document.getElementById("supplier-password-container")
+    if (passwordField) {
+      passwordField.style.display = "block"
+    }
+
+    document.getElementById("supplier-form").reset()
+    document.getElementById("supplier-form-container").style.display = "flex"
+  }
+
+  openForEdit(supplierId) {
+    this.supplierService
+      .getSupplierById(supplierId)
+      .then((supplier) => {
+        document.getElementById("supplier-form-title").textContent = "Editar Proveedor"
+        document.getElementById("supplier-id").value = supplier.id
+        document.getElementById("supplier-username").value = supplier.username
+        document.getElementById("supplier-email").value = supplier.email
+        document.getElementById("supplier-name").value = supplier.name
+        document.getElementById("supplier-address").value = supplier.address
+        document.getElementById("supplier-phone").value = supplier.phone || ""
+
+        // Ocultar campo de contraseña para edición
+        const passwordField = document.getElementById("supplier-password-container")
+        if (passwordField) {
+          passwordField.style.display = "none"
         }
 
-        this.container.style.display = "none";
-        this.onSubmitSuccess();
-      } catch (error) {
-        console.error("Error saving supplier:", error);
-        this.showError(
-          `Error al guardar proveedor: ${this.getErrorMessage(error)}`
-        );
-      }
-    });
-
-    this.cancelBtn.addEventListener("click", () => {
-      this.container.style.display = "none";
-    });
+        document.getElementById("supplier-form-container").style.display = "flex"
+      })
+      .catch((error) => {
+        console.error("Error al cargar proveedor:", error)
+        window.showToast("Error al cargar proveedor", "error")
+      })
   }
 
-  getFormData() {
-    const taxId = document.getElementById("supplier-taxId").value.trim();
-    const company = document.getElementById("supplier-company").value.trim();
-    const userId = document.getElementById("supplier-userId").value.trim();
-    const rating = document.getElementById("supplier-rating").value.trim();
+  handleSubmit(e) {
+    e.preventDefault()
 
-    if (!taxId) {
-      throw new Error("Tax ID es requerido");
+    const formData = {
+      id: document.getElementById("supplier-id").value || null,
+      username: document.getElementById("supplier-username").value,
+      email: document.getElementById("supplier-email").value,
+      name: document.getElementById("supplier-name").value,
+      address: document.getElementById("supplier-address").value,
+      phone: document.getElementById("supplier-phone").value,
+      roles: ["SUPPLIER"], // Los proveedores siempre tienen rol SUPPLIER
     }
 
-    if (!company) {
-      throw new Error("Nombre de la empresa es requerido");
-    }
-
-    if (!userId) {
-      throw new Error("User ID es requerido");
-    }
-
-    if (isNaN(userId)) {
-      throw new Error("User ID debe ser un número");
-    }
-
-    if (rating && isNaN(rating)) {
-      throw new Error("Rating debe ser un número");
-    }
-
-    return {
-      taxId,
-      company,
-      userId: Number(userId),
-      ...(rating && { rating: Number(rating) }),
-    };
-  }
-
-  getErrorMessage(error) {
-    if (error.response) {
-      try {
-        const data = JSON.parse(error.response);
-        return data.message || error.message;
-      } catch {
-        return error.message;
+    // Solo incluir password si es un nuevo proveedor
+    if (!formData.id) {
+      const passwordField = document.getElementById("supplier-password")
+      if (passwordField) {
+        formData.password = passwordField.value
       }
     }
-    return error.message;
+
+    const isEdit = !!formData.id
+    const promise = isEdit
+      ? this.supplierService.updateSupplier(formData.id, formData)
+      : this.supplierService.createSupplier(formData)
+
+    promise
+      .then(() => {
+        window.showToast(`Proveedor ${isEdit ? "actualizado" : "creado"} correctamente`, "success")
+        this.onSubmitSuccess()
+        this.close()
+      })
+      .catch((error) => {
+        console.error("Error al guardar proveedor:", error)
+        window.showToast(`Error al guardar proveedor: ${error.message}`, "error")
+      })
   }
 
-  showError(message) {
-    alert(message);
-  }
-
-  showSuccess(message) {
-    console.log(message);
+  close() {
+    document.getElementById("supplier-form-container").style.display = "none"
   }
 }
 
-export default SupplierForm;
+export default SupplierForm

@@ -12,27 +12,67 @@ import CategoryForm from "./Categories/CategoryForm.js";
 import ReservationService from "./Reservations/ReservationService.js";
 import ReservationList from "./Reservations/ReservationList.js";
 import ReservationForm from "./Reservations/ReservationForm.js";
-import SupplierService from "./Suppliers/SupplierService.js";
-import SupplierList from "./Suppliers/SupplierList.js";
-import SupplierForm from "./Suppliers/SupplierForm.js";
 import CustomerService from "./Customers/CustomerService.js";
 import CustomerList from "./Customers/CustomerList.js";
 import CustomerForm from "./Customers/CustomerForm.js";
-window.API_BASE_URL = "http://localhost:8080"
+import SupplierService from "./Suppliers/SupplierService.js";
+import SupplierList from "./Suppliers/SupplierList.js";
+import SupplierForm from "./Suppliers/SupplierForm.js";
+
+window.API_BASE_URL = "http://localhost:8080";
+
 class App {
   constructor() {
+    // 1. Initialize API and Auth services first
     this.apiService = new ApiService("http://localhost:8080/");
     this.authService = new AuthService();
+    
+    // 2. Initialize all business services
     this.toolService = new ToolService(this.apiService);
     this.categoryService = new CategoryService(this.apiService);
     this.reservationService = new ReservationService(this.apiService);
-    this.supplierService = new SupplierService(this.apiService);
     this.customerService = new CustomerService(this.apiService);
+    this.supplierService = new SupplierService(this.apiService);
 
-
+    // 3. Initialize header and auth components
     this.header = new Header(this.authService);
     this.login = new Login(this.authService, this.handleAuthChange.bind(this));
+    this.register = new Register(
+      this.authService,
+      this.handleAuthChange.bind(this),
+      this.navigateTo.bind(this)
+    );
 
+    // 4. Initialize forms (which depend on services)
+    this.toolForm = new ToolForm(
+      this.toolService,
+      this.categoryService,
+      this.supplierService,
+      this.handleToolSubmitSuccess.bind(this)
+    );
+
+    this.categoryForm = new CategoryForm(
+      this.categoryService,
+      this.handleCategorySubmitSuccess.bind(this)
+    );
+
+    this.supplierForm = new SupplierForm(
+      this.supplierService,
+      this.handleSupplierSubmitSuccess.bind(this)
+    );
+
+    this.customerForm = new CustomerForm(
+      this.customerService,
+      this.handleCustomerSubmitSuccess.bind(this)
+    );
+
+    this.reservationForm = new ReservationForm(
+      this.reservationService,
+      this.toolService,
+      this.handleReservationSubmitSuccess.bind(this)
+    );
+
+    // 5. Initialize lists (which depend on forms and services)
     this.toolList = new ToolList(
       this.toolService,
       this.authService,
@@ -41,21 +81,11 @@ class App {
       this.handleDeleteTool.bind(this),
       this.handleReserveTool.bind(this)
     );
-    this.toolForm = new ToolForm(
-      this.toolService,
-      this.categoryService,
-      this.supplierService,
-      this.handleToolSubmitSuccess.bind(this)
-    );
 
     this.categoryList = new CategoryList(
       this.categoryService,
       this.handleEditCategory.bind(this),
       this.handleDeleteCategory.bind(this)
-    );
-    this.categoryForm = new CategoryForm(
-      this.categoryService,
-      this.handleCategorySubmitSuccess.bind(this)
     );
 
     this.supplierList = new SupplierList(
@@ -63,36 +93,19 @@ class App {
       this.handleEditSupplier.bind(this),
       this.handleDeleteSupplier.bind(this)
     );
-    this.supplierForm = new SupplierForm(
-      this.supplierService,
-      this.handleSupplierSubmitSuccess.bind(this)
-    );
+
     this.customerList = new CustomerList(
       this.customerService,
       this.handleEditCustomer.bind(this),
       this.handleDeleteCustomer.bind(this)
-    );
-    this.customerForm = new CustomerForm(
-      this.customerService,
-      this.handleCustomerSubmitSuccess.bind(this)
     );
 
     this.reservationList = new ReservationList(
       this.reservationService,
       this.cancelReservation.bind(this)
     );
-    this.reservationForm = new ReservationForm(
-      this.reservationService,
-      this.toolService,
-      this.handleReservationSubmitSuccess.bind(this)
-    );
 
-    this.register = new Register(
-      this.authService, 
-      this.handleAuthChange.bind(this),
-      this.navigateTo.bind(this)
-    );
-
+    // 6. Initialize the app
     this.init();
   }
 
@@ -100,7 +113,6 @@ class App {
     this.header.render();
     this.setupPageNavigation();
     this.setupCategoryModal();
-    this.setupSupplierModal();
     this.setupCustomerModal();
     this.setupDashboardNavigation();
     this.setupReservationFilters();
@@ -141,45 +153,47 @@ class App {
   }
 
   setupCategoryModal() {
-    document
-      .getElementById("manage-categories-btn")
-      ?.addEventListener("click", () => {
+    const manageCategoriesBtn = document.getElementById("manage-categories-btn");
+    if (manageCategoriesBtn) {
+      manageCategoriesBtn.addEventListener("click", () => {
         document.getElementById("categories-modal").style.display = "flex";
         this.categoryList.render();
       });
+    }
 
-    document.querySelector(".close-modal").addEventListener("click", () => {
-      document.getElementById("categories-modal").style.display = "none";
-    });
+    const closeModal = document.querySelector(".close-modal");
+    if (closeModal) {
+      closeModal.addEventListener("click", () => {
+        document.getElementById("categories-modal").style.display = "none";
+      });
+    }
 
-    document
-      .getElementById("add-category-btn")
-      .addEventListener("click", () => {
+    const addCategoryBtn = document.getElementById("add-category-btn");
+    if (addCategoryBtn) {
+      addCategoryBtn.addEventListener("click", () => {
         this.categoryForm.openForCreate();
       });
-  }
-
-  setupSupplierModal() {
-    document
-      .getElementById("add-supplier-btn")
-      ?.addEventListener("click", () => {
-        this.supplierForm.openForCreate();
-      });
+    }
   }
 
   setupCustomerModal() {
-    document
-      .getElementById("add-customer-btn")
-      ?.addEventListener("click", () => {
+    const addCustomerBtn = document.getElementById("add-customer-btn");
+    if (addCustomerBtn) {
+      addCustomerBtn.addEventListener("click", () => {
         this.customerForm.openForCreate();
       });
+    }
   }
 
   navigateTo(page) {
     document
       .querySelectorAll(".page")
       .forEach((p) => p.classList.remove("active"));
-    document.getElementById(page).classList.add("active");
+    
+    const targetPage = document.getElementById(page);
+    if (targetPage) {
+      targetPage.classList.add("active");
+    }
 
     if (page === "login") {
       this.login.render();
@@ -217,12 +231,10 @@ class App {
 
     if (isAuthenticated) {
       const userRole = this.authService.getUserRole();
-
       this.updateMenuVisibility(userRole);
-
-      window.navigateToPage("tools");
+      this.navigateTo("home");
     } else {
-      window.navigateToPage("login");
+      this.navigateTo("login");
     }
   }
 
@@ -233,44 +245,53 @@ class App {
       const addToolBtn = document.getElementById("add-tool-btn");
       const userRole = this.authService.getUserRole();
 
-      addToolBtn.style.display =
-        userRole === "ADMIN" || userRole === "SUPPLIER" ? "block" : "none";
-
-      addToolBtn.onclick = () => this.toolForm.openForCreate();
+      if (addToolBtn) {
+        addToolBtn.style.display =
+          userRole === "ADMIN" || userRole === "SUPPLIER" ? "block" : "none";
+        addToolBtn.onclick = () => this.toolForm.openForCreate();
+      }
 
       this.categoryService.getCategories().then((categories) => {
         const select = document.getElementById("category-filter");
-        select.innerHTML = '<option value="">Todas las categorías</option>';
-
-        categories.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category.id;
-          option.textContent = category.name;
-          select.appendChild(option);
-        });
-      });
-
-      document.getElementById("search-btn").addEventListener("click", () => {
-        const searchTerm = document.getElementById("tool-search").value;
-        const categoryId = document.getElementById("category-filter").value;
-        this.toolList.filterTools(searchTerm, categoryId);
-      });
-
-      document.getElementById("tool-search").addEventListener("keyup", (e) => {
-        if (e.key === "Enter") {
-          const searchTerm = e.target.value;
-          const categoryId = document.getElementById("category-filter").value;
-          this.toolList.filterTools(searchTerm, categoryId);
+        if (select) {
+          select.innerHTML = '<option value="">Todas las categorías</option>';
+          categories.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category.id;
+            option.textContent = category.name;
+            select.appendChild(option);
+          });
         }
       });
 
-      document
-        .getElementById("category-filter")
-        .addEventListener("change", (e) => {
+      const searchBtn = document.getElementById("search-btn");
+      if (searchBtn) {
+        searchBtn.addEventListener("click", () => {
+          const searchTerm = document.getElementById("tool-search").value;
+          const categoryId = document.getElementById("category-filter").value;
+          this.toolList.filterTools(searchTerm, categoryId);
+        });
+      }
+
+      const toolSearch = document.getElementById("tool-search");
+      if (toolSearch) {
+        toolSearch.addEventListener("keyup", (e) => {
+          if (e.key === "Enter") {
+            const searchTerm = e.target.value;
+            const categoryId = document.getElementById("category-filter").value;
+            this.toolList.filterTools(searchTerm, categoryId);
+          }
+        });
+      }
+
+      const categoryFilter = document.getElementById("category-filter");
+      if (categoryFilter) {
+        categoryFilter.addEventListener("change", (e) => {
           const categoryId = e.target.value;
           const searchTerm = document.getElementById("tool-search").value;
           this.toolList.filterTools(searchTerm, categoryId);
         });
+      }
     }
   }
 
@@ -279,26 +300,29 @@ class App {
       this.reservationList.render();
 
       const addReservationBtn = document.getElementById("add-reservation-btn");
-      addReservationBtn.style.display =
-        this.authService.getUserRole() === "CUSTOMER" ? "flex" : "none";
+      if (addReservationBtn) {
+        addReservationBtn.style.display =
+          this.authService.getUserRole() === "CUSTOMER" ? "flex" : "none";
 
-      addReservationBtn.onclick = () => {
-        this.reservationForm.loadTools().then(() => {
-          document.getElementById("reservation-form-container").style.display =
-            "flex";
-        });
-      };
+        addReservationBtn.onclick = () => {
+          this.reservationForm.loadTools().then(() => {
+            document.getElementById("reservation-form-container").style.display =
+              "flex";
+          });
+        };
+      }
     }
   }
 
   loadSuppliersPage() {
     if (document.getElementById("suppliers").classList.contains("active")) {
       this.supplierList.render();
-
       const addSupplierBtn = document.getElementById("add-supplier-btn");
       const userRole = this.authService.getUserRole();
-
-      addSupplierBtn.style.display = userRole === "ADMIN" ? "block" : "none";
+      if (addSupplierBtn) {
+        addSupplierBtn.style.display = userRole === "ADMIN" ? "block" : "none";
+        addSupplierBtn.onclick = () => this.supplierForm.openForCreate();
+      }
     }
   }
 
@@ -306,12 +330,16 @@ class App {
     if (document.getElementById("customers").classList.contains("active")) {
       this.customerList.render();
 
-      const addSupplierBtn = document.getElementById("add-customer-btn");
+      const addCustomerBtn = document.getElementById("add-customer-btn");
       const userRole = this.authService.getUserRole();
 
-      addSupplierBtn.style.display = userRole === "ADMIN" ? "block" : "none";
+      if (addCustomerBtn) {
+        addCustomerBtn.style.display = userRole === "ADMIN" ? "block" : "none";
+      }
     }
   }
+
+  // Handler methods
   handleEditTool(toolId) {
     this.toolForm.openForEdit(toolId);
   }
@@ -382,19 +410,21 @@ class App {
     this.supplierForm.openForEdit(supplierId);
   }
 
-  async handleDeleteSupplier(supplierId) {
-    if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
-      try {
-        await this.supplierService.deleteSupplier(supplierId);
-        this.supplierList.render();
-        window.showToast("Proveedor eliminado correctamente", "success");
-      } catch (error) {
-        console.error("Error deleting supplier:", error);
-        window.showToast(
-          `Error al eliminar proveedor: ${error.message}`,
-          "error"
-        );
-      }
+  handleDeleteSupplier(supplierId) {
+    if (confirm("¿Estás seguro de eliminar este proveedor?")) {
+      this.supplierService
+        .deleteSupplier(supplierId)
+        .then(() => {
+          window.showToast("Proveedor eliminado correctamente", "success");
+          this.supplierList.render();
+        })
+        .catch((error) => {
+          console.error("Error al eliminar proveedor:", error);
+          window.showToast(
+            `Error al eliminar proveedor: ${error.message}`,
+            "error"
+          );
+        });
     }
   }
 
@@ -407,27 +437,28 @@ class App {
     this.customerForm.openForEdit(customerId);
   }
 
-  async handleDeleteCustomer(customerId) {
-    if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
-      try {
-        await this.customerService.deleteCustomer(customerId);
-        this.customerList.render();
-        window.showToast("Proveedor eliminado correctamente", "success");
-      } catch (error) {
-        console.error("Error deleting customer:", error);
-        window.showToast(
-          `Error al eliminar proveedor: ${error.message}`,
-          "error"
-        );
-      }
+  handleDeleteCustomer(customerId) {
+    if (confirm("¿Estás seguro de eliminar este usuario?")) {
+      this.customerService
+        .deleteCustomer(customerId)
+        .then(() => {
+          window.showToast("Usuario eliminado correctamente", "success");
+          this.customerList.render();
+        })
+        .catch((error) => {
+          console.error("Error al eliminar usuario:", error);
+          window.showToast(
+            `Error al eliminar usuario: ${error.message}`,
+            "error"
+          );
+        });
     }
   }
 
   handleCustomerSubmitSuccess() {
     this.customerList.render();
-    window.showToast("Proveedor guardado correctamente", "success");
+    window.showToast("Usuario guardado correctamente", "success");
   }
-
 
   async cancelReservation(id) {
     return this.apiService.request(`api/alkile/reservations/${id}/cancel`, {

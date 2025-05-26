@@ -1,4 +1,4 @@
-class Userservice {
+class UserService {
   constructor(apiService) {
     this.apiService = apiService;
   }
@@ -7,29 +7,29 @@ class Userservice {
     return this.apiService.request('api/alkile/users');
   }
 
-  async getSupplierById(id) {
+  async getUsersById(id) {
     return this.apiService.request(`api/alkile/users/${id}`);
   }
 
-  async createSupplier(supplierData) {
+  async createUsers(usersData) {
     return this.apiService.request('api/alkile/users', {
       method: 'POST',
-      body: JSON.stringify(supplierData)
+      body: JSON.stringify(usersData)
     });
   }
 
-  async updateSupplier(id, supplierData) {
+  async updateUsers(id, usersData) {
     return this.apiService.request(`api/alkile/users/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(supplierData)
+      body: JSON.stringify(usersData)
     });
   }
 
-  async deleteSupplier(id) {
+  async deleteUsers(id) {
     return this.apiService.request(`api/alkile/users/${id}`, {
       method: 'DELETE'
     });
   }
 }
 
-export default Userservice;
+export default UserService;
