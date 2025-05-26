@@ -15,7 +15,9 @@ import ReservationForm from "./Reservations/ReservationForm.js";
 import SupplierService from "./Suppliers/SupplierService.js";
 import SupplierList from "./Suppliers/SupplierList.js";
 import SupplierForm from "./Suppliers/SupplierForm.js";
-
+import CustomerService from "./Customers/CustomerService.js";
+import CustomerList from "./Customers/CustomerList.js";
+import CustomerForm from "./Customers/CustomerForm.js";
 window.API_BASE_URL = "http://localhost:8080"
 class App {
   constructor() {
@@ -25,6 +27,8 @@ class App {
     this.categoryService = new CategoryService(this.apiService);
     this.reservationService = new ReservationService(this.apiService);
     this.supplierService = new SupplierService(this.apiService);
+    this.customerService = new CustomerService(this.apiService);
+
 
     this.header = new Header(this.authService);
     this.login = new Login(this.authService, this.handleAuthChange.bind(this));
@@ -63,6 +67,15 @@ class App {
       this.supplierService,
       this.handleSupplierSubmitSuccess.bind(this)
     );
+    this.customerList = new CustomerList(
+      this.customerService,
+      this.handleEditCustomer.bind(this),
+      this.handleDeleteCustomer.bind(this)
+    );
+    this.customerForm = new CustomerForm(
+      this.customerService,
+      this.handleCustomerSubmitSuccess.bind(this)
+    );
 
     this.reservationList = new ReservationList(
       this.reservationService,
@@ -88,6 +101,7 @@ class App {
     this.setupPageNavigation();
     this.setupCategoryModal();
     this.setupSupplierModal();
+    this.setupCustomerModal();
     this.setupDashboardNavigation();
     this.setupReservationFilters();
     this.handleAuthChange();
@@ -153,6 +167,14 @@ class App {
       });
   }
 
+  setupCustomerModal() {
+    document
+      .getElementById("add-customer-btn")
+      ?.addEventListener("click", () => {
+        this.customerForm.openForCreate();
+      });
+  }
+
   navigateTo(page) {
     document
       .querySelectorAll(".page")
@@ -169,6 +191,8 @@ class App {
       this.loadReservationsPage();
     } else if (page === "suppliers") {
       this.loadSuppliersPage();
+    } else if (page === "customers") {
+      this.loadCustomersPage();
     }
   }
 
@@ -278,6 +302,16 @@ class App {
     }
   }
 
+  loadCustomersPage() {
+    if (document.getElementById("customers").classList.contains("active")) {
+      this.customerList.render();
+
+      const addSupplierBtn = document.getElementById("add-customer-btn");
+      const userRole = this.authService.getUserRole();
+
+      addSupplierBtn.style.display = userRole === "ADMIN" ? "block" : "none";
+    }
+  }
   handleEditTool(toolId) {
     this.toolForm.openForEdit(toolId);
   }
@@ -368,6 +402,32 @@ class App {
     this.supplierList.render();
     window.showToast("Proveedor guardado correctamente", "success");
   }
+
+  handleEditCustomer(customerId) {
+    this.customerForm.openForEdit(customerId);
+  }
+
+  async handleDeleteCustomer(customerId) {
+    if (confirm("¿Estás seguro de que deseas eliminar este proveedor?")) {
+      try {
+        await this.customerService.deleteCustomer(customerId);
+        this.customerList.render();
+        window.showToast("Proveedor eliminado correctamente", "success");
+      } catch (error) {
+        console.error("Error deleting customer:", error);
+        window.showToast(
+          `Error al eliminar proveedor: ${error.message}`,
+          "error"
+        );
+      }
+    }
+  }
+
+  handleCustomerSubmitSuccess() {
+    this.customerList.render();
+    window.showToast("Proveedor guardado correctamente", "success");
+  }
+
 
   async cancelReservation(id) {
     return this.apiService.request(`api/alkile/reservations/${id}/cancel`, {

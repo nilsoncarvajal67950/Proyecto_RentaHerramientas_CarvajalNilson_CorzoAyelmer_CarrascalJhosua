@@ -41,11 +41,20 @@
                 >Proveedores</a
               >
             </li>
+            <li>
+              <a
+                href="#"
+                class="nav-link"
+                data-page="customers"
+                id="menu-customers"
+                >Usuarios</a
+              >
+            </li>
             <li id="login-nav">
               <a href="#" class="nav-link" data-page="login">Iniciar Sesión</a>
             </li>
             <li id="register-nav">
-                <a href="#" class="nav-link" data-page="registro">Registrarse</a>
+              <a href="#" class="nav-link" data-page="registro">Registrarse</a>
             </li>
             <li id="logout-nav" style="display: none">
               <a href="#" id="logout-btn">Cerrar Sesión</a>
@@ -118,9 +127,9 @@
             </div>
             <button type="submit" class="btn">Iniciar Sesión</button>
             <p class="auth-switch">
-            ¿No tienes una cuenta?
-            <a href="#" class="nav-link" data-page="registro">Registrate</a>
-          </p>
+              ¿No tienes una cuenta?
+              <a href="#" class="nav-link" data-page="registro">Registrate</a>
+            </p>
           </form>
           <div id="login-error" class="error-message"></div>
         </div>
@@ -362,6 +371,65 @@
                   type="button"
                   class="btn btn-secondary"
                   id="cancel-supplier"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section id="customers" class="page">
+        <div class="section-header">
+          <h2>Usuarios</h2>
+          <button id="add-customer-btn" class="btn" style="display: none">
+            <i class="fas fa-plus"></i> Agregar Usuario
+          </button>
+        </div>
+        <div id="customers-list" class="grid-container"></div>
+        <div
+          id="customer-form-container"
+          class="modal-form"
+          style="display: none"
+        >
+          <div class="modal-content">
+            <h3 id="customer-form-title">Agregar Usuario</h3>
+            <form id="customer-form">
+              <input type="hidden" id="customer-id" />
+              <div class="form-group">
+                <label for="customer-username">Nombre de usuario:</label>
+                <input type="text" id="customer-username" required />
+              </div>
+              <div class="form-group">
+                <label for="customer-email">Email:</label>
+                <input type="email" id="customer-email" required />
+              </div>
+              <div class="form-group">
+                <label for="customer-name">Nombre completo:</label>
+                <input type="text" id="customer-name" required />
+              </div>
+              <div class="form-group">
+                <label for="customer-address">Dirección:</label>
+                <input type="text" id="customer-address" required />
+              </div>
+              <div class="form-group">
+                <label for="customer-phone">Teléfono:</label>
+                <input type="tel" id="customer-phone" />
+              </div>
+              <div class="form-group">
+                <label for="customer-role">Rol:</label>
+                <select id="customer-role" required>
+                  <option value="CUSTOMER">Cliente</option>
+                  <option value="SUPPLIER">Proveedor</option>
+                  <option value="ADMIN">Administrador</option>
+                </select>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn">Guardar</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="cancel-customer"
                 >
                   Cancelar
                 </button>
