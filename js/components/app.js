@@ -242,6 +242,7 @@ class App {
     if (document.getElementById("tools").classList.contains("active")) {
       this.toolList.render();
 
+      const categoryBtn = document.getElementById("manage-categories-btn");
       const addToolBtn = document.getElementById("add-tool-btn");
       const userRole = this.authService.getUserRole();
 
@@ -249,6 +250,15 @@ class App {
         addToolBtn.style.display =
           userRole === "ADMIN" || userRole === "SUPPLIER" ? "block" : "none";
         addToolBtn.onclick = () => this.toolForm.openForCreate();
+      }
+      
+      if (categoryBtn) {
+        categoryBtn.style.display =
+          userRole === "ADMIN" || userRole === "SUPPLIER" ? "block" : "none";
+        categoryBtn.onclick = () => {
+          document.getElementById("categories-modal").style.display = "flex";
+          this.categoryList.render();
+        };
       }
 
       this.categoryService.getCategories().then((categories) => {
@@ -335,6 +345,7 @@ class App {
 
       if (addCustomerBtn) {
         addCustomerBtn.style.display = userRole === "ADMIN" ? "block" : "none";
+        addCustomerBtn.onclick = () => this.customerForm.openForCreate();
       }
     }
   }
@@ -410,21 +421,19 @@ class App {
     this.supplierForm.openForEdit(supplierId);
   }
 
-  handleDeleteSupplier(supplierId) {
+  async handleDeleteSupplier(supplierId) {
     if (confirm("¿Estás seguro de eliminar este proveedor?")) {
-      this.supplierService
-        .deleteSupplier(supplierId)
-        .then(() => {
-          window.showToast("Proveedor eliminado correctamente", "success");
-          this.supplierList.render();
-        })
-        .catch((error) => {
-          console.error("Error al eliminar proveedor:", error);
-          window.showToast(
-            `Error al eliminar proveedor: ${error.message}`,
-            "error"
-          );
-        });
+      try {
+        await this.supplierService.deleteSupplier(supplierId);
+        window.showToast("Proveedor eliminado correctamente", "success");
+        this.supplierList.render();
+      } catch (error) {
+        console.error("Error al eliminar proveedor:", error);
+        window.showToast(
+          `Error al eliminar proveedor: ${error.message}`,
+          "error"
+        );
+      }
     }
   }
 
@@ -437,21 +446,19 @@ class App {
     this.customerForm.openForEdit(customerId);
   }
 
-  handleDeleteCustomer(customerId) {
+  async handleDeleteCustomer(customerId) {
     if (confirm("¿Estás seguro de eliminar este usuario?")) {
-      this.customerService
-        .deleteCustomer(customerId)
-        .then(() => {
-          window.showToast("Usuario eliminado correctamente", "success");
-          this.customerList.render();
-        })
-        .catch((error) => {
-          console.error("Error al eliminar usuario:", error);
-          window.showToast(
-            `Error al eliminar usuario: ${error.message}`,
-            "error"
-          );
-        });
+      try {
+        await this.customerService.deleteCustomer(customerId);
+        window.showToast("Usuario eliminado correctamente", "success");
+        this.customerList.render();
+      } catch (error) {
+        console.error("Error al eliminar usuario:", error);
+        window.showToast(
+          `Error al eliminar usuario: ${error.message}`,
+          "error"
+        );
+      }
     }
   }
 
@@ -461,9 +468,16 @@ class App {
   }
 
   async cancelReservation(id) {
-    return this.apiService.request(`api/alkile/reservations/${id}/cancel`, {
-      method: "PUT",
-    });
+    try {
+      await this.apiService.request(`api/alkile/reservations/${id}/cancel`, {
+        method: "PUT",
+      });
+      window.showToast("Reserva cancelada correctamente", "success");
+      this.reservationList.render();
+    } catch (error) {
+      console.error("Error canceling reservation:", error);
+      window.showToast(`Error al cancelar reserva: ${error.message}`, "error");
+    }
   }
 
   handleReservationSubmitSuccess() {

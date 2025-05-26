@@ -280,39 +280,7 @@
           </button>
         </div>
         <div id="reservations-container"></div>
-        <div
-          id="reservation-form-container"
-          class="modal-form"
-          style="display: none"
-        >
-          <div class="modal-content">
-            <h3>Nueva Reserva</h3>
-            <form id="reservation-form">
-              <div class="form-group">
-                <label for="reservation-tool">Herramienta:</label>
-                <select id="reservation-tool" required></select>
-              </div>
-              <div class="form-group">
-                <label for="reservation-start-date">Fecha de inicio:</label>
-                <input type="date" id="reservation-start-date" required />
-              </div>
-              <div class="form-group">
-                <label for="reservation-end-date">Fecha de fin:</label>
-                <input type="date" id="reservation-end-date" required />
-              </div>
-              <div class="form-actions">
-                <button type="submit" class="btn">Reservar</button>
-                <button
-                  type="button"
-                  class="btn btn-secondary"
-                  id="cancel-reservation"
-                >
-                  Cancelar
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
+        
         <button
           id="add-reservation-btn"
           class="btn floating-btn"
@@ -476,6 +444,39 @@
         <button id="add-category-btn" class="btn">Agregar Categoría</button>
       </div>
     </div>
+    <div
+          id="reservation-form-container"
+          class="modal-form"
+          style="display: none"
+        >
+          <div class="modal-content">
+            <h3>Nueva Reserva</h3>
+            <form id="reservation-form">
+              <div class="form-group">
+                <label for="reservation-tool">Herramienta:</label>
+                <select id="reservation-tool" required></select>
+              </div>
+              <div class="form-group">
+                <label for="reservation-start-date">Fecha de inicio:</label>
+                <input type="date" id="reservation-start-date" required />
+              </div>
+              <div class="form-group">
+                <label for="reservation-end-date">Fecha de fin:</label>
+                <input type="date" id="reservation-end-date" required />
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn">Reservar</button>
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="cancel-reservation"
+                >
+                  Cancelar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
 
     <div id="loading-spinner" class="spinner-container" style="display: none">
       <div class="spinner"></div>

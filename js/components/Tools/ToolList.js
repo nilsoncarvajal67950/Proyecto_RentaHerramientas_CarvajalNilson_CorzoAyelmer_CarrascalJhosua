@@ -37,7 +37,7 @@ class ToolList {
         imageUrl: tool.ImageUrl, 
         fullImageUrl: this.getFullImageUrl(tool.ImageUrl),
         categoryId: tool.categoryId,
-        supplier: tool.user
+        supplier: tool.supplier.name || "Sin proveedor",
       })));
 
       this.container.innerHTML = this.createToolsHtml(this.allTools, categories);
@@ -101,7 +101,7 @@ class ToolList {
 
   createToolsHtml(tools, categories) {
     if (tools.length === 0) {
-      return `
+        return `
             <div class="empty-state">
                 <i class="fas fa-tools fa-3x"></i>
                 <h3>No hay herramientas disponibles</h3>
@@ -114,88 +114,88 @@ class ToolList {
     const userRole = this.authService.getUserRole();
 
     return tools
-      .map((tool) => {
-        const categoria = tool.categoryId
-          ? categoryMap.get(tool.categoryId)
-          : null;
+        .map((tool) => {
+            const categoria = tool.categoryId
+                ? categoryMap.get(tool.categoryId)
+                : null;
 
-        const canEdit = ["ADMIN", "SUPPLIER"].includes(userRole);
-        const canDelete = userRole === "ADMIN";
-        const canReserve = userRole === "CUSTOMER";
+            const canEdit = ["ADMIN", "SUPPLIER"].includes(userRole);
+            const canDelete = userRole === "ADMIN";
+            const canReserve = userRole === "CUSTOMER";
 
-        const imageUrl = this.getFullImageUrl(tool.ImageUrl); 
-        const imageHtml = imageUrl
-          ? `<img src="${imageUrl}" alt="Imagen de ${tool.name}" class="tool-image" 
-               onerror="this.onerror=null;this.src='./assets/icono.jpg'" />`
-          : `<div class="no-image"><i class="fas fa-tools"></i> Sin imagen</div>`;
+            // Obtener información del proveedor
+            const supplier = tool.supplier || {};
+            const supplierName = supplier.name || "Proveedor no disponible";
+            const supplierEmail = supplier.email || "";
+            const supplierPhone = supplier.phone || "";
 
-        return `
+            const imageUrl = this.getFullImageUrl(tool.ImageUrl); 
+            const imageHtml = imageUrl
+                ? `<img src="${imageUrl}" alt="Imagen de ${tool.name}" class="tool-image" 
+                     onerror="this.onerror=null;this.src='./assets/icono.jpg'" />`
+                : `<div class="no-image"><i class="fas fa-tools"></i> Sin imagen</div>`;
+
+            return `
                 <div class="card tool-card">
                     <div class="tool-image-container">
                         ${imageHtml}
                     </div>
                     <h3>${tool.name || "Sin nombre"}</h3>
                     <p class="tool-description">${
-                      tool.description || "Sin descripción"
+                        tool.description || "Sin descripción"
                     }</p>
 
                     <div class="tool-details">
                         <p><i class="fas fa-dollar-sign"></i> Costo diario: $${(
-                          tool.dailyCost ?? 0
+                            tool.dailyCost ?? 0
                         ).toFixed(2)}</p>
                         <p><i class="fas fa-boxes"></i> Stock: ${
-                          tool.stock ?? 0
+                            tool.stock ?? 0
                         }</p>
                         <p><i class="fas fa-tag"></i> Categoría: ${
-                          categoria?.name ?? "Categoría no encontrada"
+                            categoria?.name ?? "Categoría no encontrada"
                         }</p>
-                        ${
-                          tool.supplier
-                            ? `
-                            <p><i class="fas fa-truck"></i> Proveedor: ${
-                              tool.company ?? "Sin proveedor"
-                            }</p>
-                        `
-                            : ""
-                        }
+                        <p><i class="fas fa-user-tie"></i> Proveedor: ${supplierName}</p>
+                        <p><i class="fas fa-envelope"></i> Contacto: ${supplierEmail}</p>
+                        <p><i class="fas fa-phone"></i> Teléfono: ${supplierPhone}</p>
                     </div>
 
                     <div class="card-actions">
                         ${
-                          canEdit
-                            ? `
-                            <button class="btn btn-secondary edit-tool" data-id="${tool.id}">
-                                <i class="fas fa-edit"></i> Editar
-                            </button>
-                        `
-                            : ""
+                            canEdit
+                                ? `
+                                <button class="btn btn-secondary edit-tool" data-id="${tool.id}">
+                                    <i class="fas fa-edit"></i> Editar
+                                </button>
+                            `
+                                : ""
                         }
 
                         ${
-                          canDelete
-                            ? `
-                            <button class="btn btn-danger delete-tool" data-id="${tool.id}">
-                                <i class="fas fa-trash"></i> Eliminar
-                            </button>
-                        `
-                            : ""
+                            canDelete
+                                ? `
+                                <button class="btn btn-danger delete-tool" data-id="${tool.id}">
+                                    <i class="fas fa-trash"></i> Eliminar
+                                </button>
+                            `
+                                : ""
                         }
 
                         ${
-                          canReserve
-                            ? `
-                            <button class="btn btn-success reserve-tool" data-id="${tool.id}">
-                                <i class="fas fa-calendar-check"></i> Reservar
-                            </button>
-                        `
-                            : ""
+                            canReserve
+                                ? `
+                                <button class="btn btn-success reserve-tool" data-id="${tool.id}">
+                                    <i class="fas fa-calendar-check"></i> Reservar
+                                </button>
+                            `
+                                : ""
                         }
                     </div>
                 </div>
             `;
-      })
-      .join("");
-  }
+        })
+        .join("");
+}
 
   setupEventListeners() {
     this.container.addEventListener("click", (e) => {

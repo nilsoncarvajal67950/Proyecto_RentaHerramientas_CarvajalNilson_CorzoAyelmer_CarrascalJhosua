@@ -39,40 +39,54 @@ class ReservationList {
     }
 
     createReservationsHtml(reservations) {
-        if (reservations.length === 0) {
-            return `
-                <div class="empty-state">
-                    <i class="fas fa-calendar-times fa-3x"></i>
-                    <h3>No tienes reservas</h3>
-                    <p>No se encontraron reservas que coincidan con los criterios de búsqueda.</p>
-                </div>
+    if (reservations.length === 0) {
+        return `
+            <div class="empty-state">
+                <i class="fas fa-calendar-times fa-3x"></i>
+                <h3>No tienes reservas</h3>
+                <p>No se encontraron reservas que coincidan con los criterios de búsqueda.</p>
+            </div>
+        `;
+    }
+
+    return reservations.map(reservation => {
+        const startDate = new Date(reservation.startDate).toLocaleDateString();
+        const endDate = new Date(reservation.endDate).toLocaleDateString();
+
+        let actionsHtml = '';
+        if (reservation.status === 'PENDING') {
+            actionsHtml += `
+                <button class="btn btn-danger cancel-reservation" data-id="${reservation.id}">
+                    <i class="fas fa-times"></i> Cancelar
+                </button>
             `;
         }
 
-        return reservations.map(reservation => {
-            const startDate = new Date(reservation.startDate).toLocaleDateString();
-            const endDate = new Date(reservation.endDate).toLocaleDateString();
-            
-            return `
-                <div class="reservation-item">
-                    <div class="reservation-status status-${reservation.status.toLowerCase()}">
-                        ${this.getStatusText(reservation.status)}
-                    </div>
-                    <h3>Reserva #${reservation.id}</h3>
-                    <p><strong>Herramienta:</strong> ID ${reservation.toolId}</p>
-                    <p><strong>Fecha de inicio:</strong> ${startDate}</p>
-                    <p><strong>Fecha de fin:</strong> ${endDate}</p>
-                    ${reservation.status === 'PENDING' ? `
-                        <div class="card-actions">
-                            <button class="btn btn-danger cancel-reservation" data-id="${reservation.id}">
-                                <i class="fas fa-times"></i> Cancelar
-                            </button>
-                        </div>
-                    ` : ''}
-                </div>
+        // Agregar botón de generar factura si está confirmada o completada
+        if (reservation.status === 'CONFIRMED' || reservation.status === 'COMPLETED') {
+            actionsHtml += `
+                <button class="btn btn-success generate-invoice" data-id="${reservation.id}">
+                    <i class="fas fa-file-invoice-dollar"></i> Generar Factura
+                </button>
             `;
-        }).join('');
-    }
+        }
+
+        return `
+            <div class="reservation-item">
+                <div class="reservation-status status-${reservation.status.toLowerCase()}">
+                    ${this.getStatusText(reservation.status)}
+                </div>
+                <h3>Reserva #${reservation.id}</h3>
+                <p><strong>Herramienta:</strong> ID ${reservation.toolId}</p>
+                <p><strong>Fecha de inicio:</strong> ${startDate}</p>
+                <p><strong>Fecha de fin:</strong> ${endDate}</p>
+                <div class="card-actions">
+                    ${actionsHtml}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
 
     getStatusText(status) {
         switch(status) {
@@ -85,14 +99,20 @@ class ReservationList {
     }
 
     setupEventListeners() {
-        this.container.addEventListener('click', (e) => {
-            const btn = e.target.closest('.cancel-reservation');
-            if (btn) {
-                const reservationId = btn.dataset.id;
-                this.onCancelReservation(reservationId);
-            }
-        });
-    }
+    this.container.addEventListener('click', (e) => {
+        const btnCancel = e.target.closest('.cancel-reservation');
+        if (btnCancel) {
+            const reservationId = btnCancel.dataset.id;
+            this.onCancelReservation(reservationId);
+        }
+
+        const btnInvoice = e.target.closest('.generate-invoice');
+        if (btnInvoice) {
+            const reservationId = btnInvoice.dataset.id;
+            window.open(`/api/payments/receipt/reservation/${reservationId}`, '_blank');
+        }
+    });
+}
 }
 
 export default ReservationList;
